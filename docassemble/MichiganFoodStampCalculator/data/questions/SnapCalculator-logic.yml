@@ -30,12 +30,13 @@ id: interview config code block
 initial: True
 code: |
   github_repo_name = 'docassemble-MichiganFoodStampCalculator' if get_config('debug') else 'docassemble-UserFeedback'
-  # al_form_type = "existing_case" 
-  MLH_instructions_included = True
+  MLH_instructions_included = False
+  MLH_materials_included = False
   MLH_court_forms = False
   MLH_esign_supported = False
   MLH_form_type = "document(s)"
   MLH_time_min = 5
+  MLH_time_max = 10
 ---
 code: |
   resource_page_url_only = "https://michiganlegalhelp.org/resources/public-assistance/food-stamps-fap"
@@ -44,9 +45,14 @@ code: |
 ---
 mandatory: true
 code: |
-  #Question screen
-  al_intro_screen
+  #Intro pages
+  MLH_intro_landing
+  MLH_agree_terms
+  MLH_intro_navigate_save
+  household_and_eligibility
   set_progress(50)
+
+  #Question screen
   HHSize
   set_progress(75)
   
@@ -59,6 +65,106 @@ code: |
     downloadMe    
   else:    
     textOnly              
+
+---
+# overrides framework question.
+# This can be used as the very first screen for an interview.
+id: MLH intro landing FirstScreen
+question: |
+  ${ MLH_interview_short_title }
+subquestion: |
+  ${ MLH_welcome_message }
+  
+  It will probably take about **${ MLH_time_min } to ${ MLH_time_max } minutes** to answer all the questions.
+continue button field: MLH_intro_landing
+
+---
+# default welcome info; keep relatively short. If lots of preconditions/warnings, make separate screen
+template: MLH_welcome_message     
+content: |
+  Welcome to the ${ MLH_interview_short_title } tool.
+
+  Use this calculator to help determine if you are eligible to get Food Stamps. This calculator will ask questions about your income and household. 
+  
+  After you answer all the questions, you will get a Food Stamps Summary printout. This will tell you if your household is eligible for Food Stamps and give you an **estimated** benefit amount. There is **no** guarantee you will receive this amount.
+
+---
+# overrides framework question.
+if: user_logged_in()
+id: MLH intro saving answers logged in
+question: |
+  Using this tool
+subquestion: |
+  <h2 class="h5">Changing an Answer</h2>
+  Tap the **${ MLH_back_button_label }** button below to go back to the previous page.
+  
+  <h2 class="h5">Saving Your Work</h2>
+  You are already signed in. Just tap the **${MLH_continue_button_label}** button to save your progress. 
+  
+  Go to the menu at the top of the screen and select “My Forms” to go back to a saved calculation.
+  
+  <h2 class="h5">Help Text</h2>
+  Tap {green underlined words} for a definition or more information.   
+terms:
+  green underlined words: |
+    More information appears when you tap the green underlined words.
+continue button field: MLH_intro_navigate_save
+---
+# overrides framework question of the same name. 
+if: not user_logged_in()
+id: MLH intro saving answers logged out
+question: |
+  Using this tool
+subquestion: |
+  <h2 class="h5">Changing an Answer</h2>
+  Tap the **${ MLH_back_button_label }** button below to go back to the previous page.
+  
+  <h2 class="h5">Saving Your Work</h2>
+  To save your work, sign in or sign up for an account. Tap the "Sign in" or "Sign up" link below the **Continue** button. Or go to the
+  % if device().is_mobile:
+  :bars:
+  % endif
+  **menu** at the top of the screen and tap "Sign in or sign up to save answers".
+  
+  To go back to a saved form, log in. Then go to the menu at the top of the screen and select “My Forms.”
+  
+  <h2 class="h5">Help Text</h2>
+  Tap {green underlined words} for a definition or more information. 
+terms:
+  green underlined words: |
+    More information appears when you tap the green underlined words.
+continue button field: MLH_intro_navigate_save
+
+---
+id: household and eligibility
+question: |
+  Household Information and Eligibility
+subquestion: |
+  We need to know how many people are in your "household." Anyone who lives in your home should be counted as part of the household. This includes family members, friends, and people you are romantically seeing, like a boyfriend or girlfriend. 
+
+  Count people even if they rent a portion of your home, or if you are renting a portion of their home. 
+
+  A good way to determine if someone is in your household is to ask if he or she lives in your home and shares a restroom or the kitchen with you, or if they buy and prepare food with you.
+
+  There are some people who cannot be counted as part of your household because they are not eligible to receive food stamps. Tap below for more information.
+  
+  ${ prog_disclose(eligibility_explanation) }
+continue button field: household_and_eligibility
+---
+template: eligibility_explanation
+subject: |
+  Who is not eligible to receive food stamps?
+content: |
+  ##### The following people are **not** eligible to get Food Stamps:
+  <ul>
+  <li>Unlawfully present immigrants
+  <li>Furloughed prisoners
+  <li>People disqualified from receiving Food Stamps because the Michigan Department of Health and Human Services (MDHHS) says they did not cooperate with employment rules, child support rules, or other program requirements
+  <li>People disqualified by MDHHS for an Intentional Program Violation or fraud
+  <li>People disqualified by MDHHS because of certain criminal convictions such as Food Stamp trafficking
+  </ul>
+
+  Most lawfully present immigrant children are eligible for Food Stamps. Most lawfully present immigrant adults who have lived in the U.S. lawfully for at least five years are also eligible. If you have questions about how a person’s immigration status affects Food Stamp eligibility, contact legal services in your area. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office near you
 
 ---
 id: chose-no-download
