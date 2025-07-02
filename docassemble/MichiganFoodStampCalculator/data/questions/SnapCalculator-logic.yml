@@ -3,7 +3,6 @@ include:
   - SnapCalculator-parameters.yml
   - SnapCalculator-questions.yml
   - SnapCalculator-calculation.yml
-  #- custom_ptla_theme_ngb.yml
 
 ---
 # docassemble-level metadata
@@ -23,23 +22,6 @@ metadata:
   #allowed_courts: []
   #typical_role: "unknown"
 
----
-#default screen parts:
-#  footer: |
-#    [:share-alt-square: Share](${ url_ask([{'undefine': ['al_sharing_type','al_how_share_link']}, 'al_share_form_screen', {'recompute': ['al_did_share_form']}, 'al_share_results']) })
-#    [:info-circle: About](${ url_action('about_this_interview') })
-#    [:comment-dots: Feedback](https://forms.office.com/Pages/ResponsePage.aspx?id=gOsuS1HkzESOjJ_IxTUKuMd_2zPCiBNIvwzVGRoYK5FUODI0TzlKNUNYSTQwVlVOUjFaVlVNVk8wTy4u){:target="_blank"}
-#---
-#features:
-  #question back button: True
-  #navigation back button: False
-  ## theme file downloaded from: bootstrap theme: https://bootswatch.com/cerulean/bootstrap.min.css
-  #css:
-    #- ptlatheme.css
-    ##- colors.css
-    ##- bootstrap.min.css
-  ##hide navbar: True 
-  #debug: False
 ---
 modules:
   - docassemble.base.core
