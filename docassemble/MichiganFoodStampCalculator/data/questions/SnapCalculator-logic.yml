@@ -1,42 +1,64 @@
+include:
+  - docassemble.mlhframework:mlh_interview_framework.yml
+  - SnapCalculator-parameters.yml
+  - SnapCalculator-questions.yml
+  - SnapCalculator-calculation.yml
+  #- custom_ptla_theme_ngb.yml
+
 ---
+# docassemble-level metadata
+# See https://docassemble.org/docs/initial.html
 metadata:
-  title: |
-    Maine SNAP Benefits Estimator
-  short title: |
-    ME SNAP Benefits Estimator
+  title: Food Stamp (FAP) Calculator
+  short title: Food Stamp Calculator
   description: |
-    The Maine SNAP calculator is built to be used by people familiar with the basic SNAP rules to estimate the monthly SNAP benefit amount a household may receive in Maine. This tool is built upon the work of Mass Legal Services and their MA SNAP Calculator 
+    Use this calculator to help you find out if you are eligible to get Food Stamps (FAP)
   #exit url: https://www.masslegalservices.org/content/online-snap-calculator
   show login: False
+  tags: []
+  authors:
+    - Brett Harrison of Maverick & Mitchell LLC
+  help_page_url: https://michiganlegalhelp.org/resources/public-assistance/food-stamps-fap
+  help_page_title: Food Stamps (FAP)
+  #allowed_courts: []
+  #typical_role: "unknown"
+
 ---
-include: 
-  - docassemble.AssemblyLine:assembly_line.yml
-  - custom_ptla_theme_ngb.yml
----
-default screen parts:
-  footer: |
-    [:share-alt-square: Share](${ url_ask([{'undefine': ['al_sharing_type','al_how_share_link']}, 'al_share_form_screen', {'recompute': ['al_did_share_form']}, 'al_share_results']) })
-    [:info-circle: About](${ url_action('about_this_interview') })
-    [:comment-dots: Feedback](https://forms.office.com/Pages/ResponsePage.aspx?id=gOsuS1HkzESOjJ_IxTUKuMd_2zPCiBNIvwzVGRoYK5FUODI0TzlKNUNYSTQwVlVOUjFaVlVNVk8wTy4u){:target="_blank"}
----
-features:
-  question back button: True
-  navigation back button: False
-  # theme file downloaded from: bootstrap theme: https://bootswatch.com/cerulean/bootstrap.min.css
-  css:
-    - ptlatheme.css
-    #- colors.css
-    #- bootstrap.min.css
-  #hide navbar: True 
-  debug: False
+#default screen parts:
+#  footer: |
+#    [:share-alt-square: Share](${ url_ask([{'undefine': ['al_sharing_type','al_how_share_link']}, 'al_share_form_screen', {'recompute': ['al_did_share_form']}, 'al_share_results']) })
+#    [:info-circle: About](${ url_action('about_this_interview') })
+#    [:comment-dots: Feedback](https://forms.office.com/Pages/ResponsePage.aspx?id=gOsuS1HkzESOjJ_IxTUKuMd_2zPCiBNIvwzVGRoYK5FUODI0TzlKNUNYSTQwVlVOUjFaVlVNVk8wTy4u){:target="_blank"}
+#---
+#features:
+  #question back button: True
+  #navigation back button: False
+  ## theme file downloaded from: bootstrap theme: https://bootswatch.com/cerulean/bootstrap.min.css
+  #css:
+    #- ptlatheme.css
+    ##- colors.css
+    ##- bootstrap.min.css
+  ##hide navbar: True 
+  #debug: False
 ---
 modules:
   - docassemble.base.core
 ---
-include:
-  - SnapCalculator-parameters.yml
-  - SnapCalculator-questions.yml
-  - SnapCalculator-calculation.yml
+id: interview config code block
+initial: True
+code: |
+  github_repo_name = 'docassemble-MichiganFoodStampCalculator' if get_config('debug') else 'docassemble-UserFeedback'
+  # al_form_type = "existing_case" 
+  MLH_instructions_included = True
+  MLH_court_forms = False
+  MLH_esign_supported = False
+  MLH_form_type = "document(s)"
+  MLH_time_min = 5
+---
+code: |
+  resource_page_url_only = "https://michiganlegalhelp.org/resources/public-assistance/food-stamps-fap"
+  resource_page_name = "Food Stamps (FAP)"
+  survey_link_url_only = "https://www.surveymonkey.com/r/WFDJ5RY"
 ---
 mandatory: true
 code: |
@@ -62,7 +84,7 @@ event: textOnly
 question: |
   You have successfully completed the calculation. 
 subquestion: |  
-  You can user the "Back" button to revise your input, or restart a new interview. 
+  You can user the ${ MLH_back_button_label } button to revise your input, or restart a new interview. 
 buttons: 
   - Exit: exit
   - Restart: restart
