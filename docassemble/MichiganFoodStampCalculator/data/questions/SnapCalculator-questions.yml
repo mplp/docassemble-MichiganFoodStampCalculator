@@ -35,29 +35,34 @@ id: Questions
 question: |
 subquestion: |
   **<span>[${as_of_date}]</span>**
-  
-  <h2>Household Composition</h2> 
+
   <br />
 fields:
+  - note: |
+      <h2>Household Composition</h2>
   - Household size: HHSize  
     datatype: integer    
   - Does the household include any members age 60+ or receiving a disability-based benefit?: ElderlyOrDisabled 
     # I suggest adding a note or "auto term" or something similar here proving examples of 
     # disability-based benefits, such as SSI, SSD, or Vetera's Disability. 
+    label above field: True
     input type: radio
     choices:
       - Yes
-      - No      
+      - No
   - Does the household have child care or disabled adult care costs?: hasDependent  
+    label above field: True
     input type: radio
     choices:
       - Yes
-      - No    
+      - No
   - note: |
-      <h2>Income</h2>    
+      <h2>Income</h2>
       
       <strong>Enter Gross __*Unearned*__ Income</strong><br>
       Examples: Unemployment Insurance Benefits, SSI, Social Security Disability Insurance (SSDI) or Retirement, Pensions, Veterans Benefits, Child Support, cash assistance like TANF, etc.
+    js show if: |
+      val('hasDependent') != null
   - Income frequency : Uneared_Income
     input type: radio
     choices:
@@ -65,26 +70,27 @@ fields:
       - Biweekly: biWkly   
       - Weekly: Wkly  
       - None: None
+    js show if: |
+      val('hasDependent') != null
   - Monthly amount: MUI
     datatype: currency   
-    show if:
-      variable: Uneared_Income
-      is: Mthly
+    js show if: |
+      val('hasDependent') != null && val('Uneared_Income') == "Mthly"
   - Biweekly amount: biWUI
     datatype: currency
     step: 1
-    show if:
-      variable: Uneared_Income
-      is: biWkly
+    js show if: |
+      val('hasDependent') != null && val('Uneared_Income') == "biWkly"
   - Weekly amount: WUI
     datatype: currency
     step: 1
-    show if:
-      variable: Uneared_Income
-      is: Wkly
+    js show if: |
+      val('hasDependent') != null && val('Uneared_Income') == "Wkly"
   - note: |  
       <strong>Enter Gross __*Earned*__ Income</strong><br>
       Wages or salaries. For self employment, including independent contractors, enter your average monthly net income (your gross income minus your business expenses).
+    js show if: |
+      val("hasDependent") != null
   - Income frequency : Earned_Income
     input type: radio
     choices:
@@ -92,26 +98,30 @@ fields:
       - Biweekly: biWkly   
       - Weekly: Wkly 
       - None: None 
+    js show if: |
+      val("hasDependent") != null
   - Monthly amount: MEI
     datatype: currency
-    show if:
-      variable: Earned_Income
-      is: Mthly
+    js show if: |
+      val('hasDependent') != null && val('Earned_Income') == 'Mthly'
   - Biweekly amount: biWEI
     datatype: currency  
-    show if:
-      variable: Earned_Income
-      is: biWkly
+    js show if: |
+      val('hasDependent') != null && val('Earned_Income') == 'biWkly'
   - Weekly amount: WEI
     datatype: currency  
-    show if:
-      variable: Earned_Income
-      is: Wkly
-  - html: <h2><b>Expenses</b></h2>       
+    js show if: |
+      val('hasDependent') != null && val('Earned_Income') == 'Wkly'
   - note: |
+      <h2>Expenses</h2>
+      
       <strong>Enter Monthly Child Support Amount</strong>  
+    js show if: |
+      val('Earned_Income') != null
   - Child support paid by the household that is legally obligated: ChildSupport
     datatype: currency        
+    js show if: |
+      val('Earned_Income') != null
   - note: |
       <strong>Enter Monthly Medical Costs</strong>      
       For people over 60 or people who get a disability based benefit, Maine allows deductions for out-of-pocket medical expenses that are more than $35/month.  Put your total monthly out-of-pocket medical expenses and we’ll calculate what deduction you’re eligible for.
@@ -120,34 +130,38 @@ fields:
       
     # I suggest adding a note or "auto term" or something similar here proving examples of 
     # disability-based benefits, such as SSI, SSD, or Vetera's Disability. 
-    show if:
-      variable: ElderlyOrDisabled
-      is: Yes
+    js show if: |
+      val('Earned_Income') != null && val('ElderlyOrDisabled') == 'Yes'
   - Monthly medical costs: MedDed
     datatype: currency        
-    show if:
-      variable: ElderlyOrDisabled
-      is: Yes
+    js show if: |
+      val('Earned_Income') != null && val('ElderlyOrDisabled') == 'Yes'
   - note: |
       <strong>Enter Monthly Dependent Care Costs for Children or Disabled Adults</strong>      
       Maine allows deductions for out-of-pocket costs for the care of a dependent (child or disabled adult) while you work, job search, or attend job training or education. 
       
       Examples include but are not limited to: daycare, babysitting, before/after school care, home health aides, and other attendant care costs.
       
-    show if:
-      variable: hasDependent
-      is: Yes
+    js show if: |
+      val('Earned_Income') != null && val('hasDependent') == 'Yes'
   - Monthly dependent care costs: DepCareDed
     datatype: currency        
-    show if:
-      variable: hasDependent
-      is: Yes    
-  - html: <strong>Enter Monthly Shelter Costs</strong>
-  - Is the household currently homeless?: isHomeless  
+    js show if: |
+      val('Earned_Income') != null && val('hasDependent') == 'Yes'
+  - note: |
+      <h2>Shelter Expenses</h2>
+      
+      <strong>Information about your costs of living.</strong>  
+    js show if: |
+      val('ChildSupport') != null
+  - Is the household currently homeless?: isHomeless
+    label above field: True
     input type: radio
     choices:
       - Yes
-      - No  
+      - No
+    js show if: |
+      val('ChildSupport') != null
   - Monthly rent or mortgage amount: RentMortgageDed
     datatype: currency        
     show if:
@@ -157,30 +171,33 @@ fields:
     datatype: currency        
     show if:
       variable: isHomeless
-      is: No  
+      is: No
   # The below is for the standard heat and utility deduction. In the HotDocs version, this is
   # only asked if the user does NOT pay rent or mortgage. 
   - Does the household have any heat or air conditioning costs (any time of year), or did your household get fuel assistance (like LIHEAP) in the last 12 months?: paysAC
+    label above field: True
     input type: radio
     choices:
       - Yes
-      - No    
+      - No
     show if:
       variable: isHomeless
       is: No
   - Does the household pay for electricity for non-heating purposes or for trash collection?: paysElec
+    label above field: True
     input type: radio
     choices:
       - Yes
-      - No    
+      - No
     show if:
       variable: paysAC
       is: No
   - Does the household pay for its own telephone service?: paysTelephone
+    label above field: True
     input type: radio
     choices:
       - Yes
-      - No    
+      - No
     show if:
       variable: paysElec
       is: No
@@ -196,6 +213,7 @@ auto terms:
   homeowner expenses: |
     You can count any recurring charges like mortgage, condo fees, mandatory association fees, property taxes, insurance, electricity, gas, heating/cooling costs, cooking fuel, water, sewer, and trash collection AND repair costs if the damage was caused by a natural disaster.
 continue button label: See Results
+
 ---
 id: downloadChoice
 comment: |
@@ -218,4 +236,3 @@ fields:
       - Calculation Details: Details
       - View DHHS Inputs: Inputs   
 continue button label: Finish
-   
