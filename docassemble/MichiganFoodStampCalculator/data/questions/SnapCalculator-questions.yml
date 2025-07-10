@@ -43,8 +43,6 @@ fields:
   - Household size: HHSize  
     datatype: integer    
   - Does the household include any members age 60+ or receiving a disability-based benefit?: ElderlyOrDisabled 
-    # I suggest adding a note or "auto term" or something similar here proving examples of 
-    # disability-based benefits, such as SSI, SSD, or Vetera's Disability. 
     label above field: True
     input type: radio
     choices:
@@ -60,7 +58,9 @@ fields:
       <h2>Income</h2>
       
       <strong>Enter Gross __*Unearned*__ Income</strong><br>
-      Examples: Unemployment Insurance Benefits, SSI, Social Security Disability Insurance (SSDI) or Retirement, Pensions, Veterans Benefits, Child Support, cash assistance like TANF, etc.
+      Examples: Unemployment Insurance Benefits, SSI, Social Security Disability Insurance (SSDI) or Retirement, Pensions, Veterans Benefits, Child Support, State Disability Assistance (SDA), Rental Income, cash assistance like TANF, FIP, or SFA, etc.
+
+      ${ collapse_template(unearned_income_exceptions) }
     js show if: |
       val('hasDependent') != null
   - Income frequency : Uneared_Income
@@ -89,6 +89,8 @@ fields:
   - note: |  
       <strong>Enter Gross __*Earned*__ Income</strong><br>
       Wages or salaries. For self employment, including independent contractors, enter your average monthly net income (your gross income minus your business expenses).
+
+      ${ collapse_template(earned_income_exceptions) }
     js show if: |
       val("hasDependent") != null
   - Income frequency : Earned_Income
@@ -123,10 +125,10 @@ fields:
     js show if: |
       val('Earned_Income') != null
   - note: |
-      <strong>Enter Monthly Medical Costs</strong>      
-      For people over 60 or people who get a disability based benefit, Maine allows deductions for out-of-pocket medical expenses that are more than $35/month.  Put your total monthly out-of-pocket medical expenses and we’ll calculate what deduction you’re eligible for.
+      <strong>Enter Monthly Medical Costs</strong>
+      For people over 60 or people who get a disability-based benefit, Michigan allows deductions for out-of-pocket medical expenses that are more than $35/month. Put your total monthly out-of-pocket medical expenses and we’ll calculate what deduction you’re eligible for.
       
-      Examples include but are not limited to: dental or medical care (including attendant care) costs not covered by insurance; prescription and over the counter medications; medical supplies; Medicare and other insurance premiums; food and vet bills for a trained service animal; dentures, hearing aids, and prosthetics; transportation and lodging costs to obtain medical treatment.
+      Examples include but are not limited to: Medical insurance premiums, dental or medical care (including attendant care) costs not covered by insurance; prescription and over the counter medications; medical supplies and equipment; Medicare and other insurance premiums; food and vet bills for a trained service animal; dentures, hearing aids, and prosthetics; transportation and lodging costs to obtain medical treatment.
       
     # I suggest adding a note or "auto term" or something similar here proving examples of 
     # disability-based benefits, such as SSI, SSD, or Vetera's Disability. 
@@ -138,7 +140,7 @@ fields:
       val('Earned_Income') != null && val('ElderlyOrDisabled') == 'Yes'
   - note: |
       <strong>Enter Monthly Dependent Care Costs for Children or Disabled Adults</strong>      
-      Maine allows deductions for out-of-pocket costs for the care of a dependent (child or disabled adult) while you work, job search, or attend job training or education. 
+      Michigan allows deductions for out-of-pocket costs for the care of a dependent (child or disabled adult) while you work, job search, or attend job training or education. 
       
       Examples include but are not limited to: daycare, babysitting, before/after school care, home health aides, and other attendant care costs.
       
@@ -203,16 +205,62 @@ fields:
       is: No
 auto terms: 
   Household size: |
-    Your SNAP household is everyone who lives with you who regularly purchases and prepares food together.
-  Green words: |
-    Words in green are defined or have help text that will show up if you click on them!
+    Your FAP household is everyone who lives with you who regularly purchases and prepares food together.
+  disability-based benefit: |
+    For example: Supplemental Security Income (SSI), Social Security Disability (SSD), or Veteran's Disability benefits.
   child care or disabled adult care costs: |
-    If you pay for childcare, home health aide, or other out-of-pocket costs for the care of a dependent while you work, job search, or attend job training or education. Choose 'yes' and we will ask about these costs below.
+    If you pay for childcare, home health aide, or other out-of-pocket costs for the care of a dependent while you work, job search, or attend job training or education, choose 'Yes' and we will ask about these costs below.
   legally obligated: |
     Only count child support that is paid under a court order. Voluntary payments or buying clothes, food, or other needs for children can’t be deducted here.
   homeowner expenses: |
     You can count any recurring charges like mortgage, condo fees, mandatory association fees, property taxes, insurance, electricity, gas, heating/cooling costs, cooking fuel, water, sewer, and trash collection AND repair costs if the damage was caused by a natural disaster.
 continue button label: See Results
+
+---
+template: unearned_income_exceptions
+subject: |
+  What types of unearned income should **not** be included?
+content: |
+  The Michigan Department of Health and Human Services (MDHHS) does not count certain types of unearned income when figuring out your Food Stamps. If you or anyone in your household has any of the following kinds of income, **DO NOT** include that income.
+
+  **Educational Income** MDHHS will not count any educational income, including scholarships, grants, loans, work-study, assistanceships and fellowships. If you or anyone in your household receives income that goes directly to pay for your education, such as scholarship money, a student loan or other educational income, **DO NOT** count any of the income.
+
+  **Income of Legal Immigrants** If someone in your household is a **legal** immigrant who is **not allowed** to receive Food Stamps, **DO NOT** count any unearned income of that person or persons.
+
+  **EXCEPTION**: You must count all cash assistance (FIP) income in the next step, even if it is received by someone in your household who is a legal immigrant.
+
+  **The MDHHS $50 "Child Support Pass-Through"**- If you or someone in your household receives cash assistance (FIP), MDHHS usually returns up to $50 per month of the child support that they collect. If you or someone in your household receives this "Child Support Pass Through", **DO NOT** count that income.
+
+  **Child Support Refunds and Reimbursements** Sometimes the Friend of the Court accidentally sends child support payments to MDHHS instead of to the custodial parent. Other times, Friend of the Court will send too much child support to MDHHS. When either of these situations happen MDHHS must return the child support payment to the custodial parent. If you or someone in your household has received a child support "refund" from MDHHS, **DO NOT** count that income.
+  
+---
+template: earned_income_exceptions
+subject: |
+  What types of earned income should **not** be included?
+content: |
+  The Michigan Department of Health and Human Services (MDHHS) does not count certain types of earned income when figuring out your Food Stamps. If you or anyone in your household has any of the following kinds of earned income, **DO NOT** include that income.
+  
+  **Work-Study** Many college students work in a "Work Study" program as a part of their financial aid package. **DO NOT** count any work study income.
+  
+  **Earned Income of Legal Immigrants** If someone in your household is a legal immigrant who is not allowed to receive Food Stamps, **DO NOT** count any earned income of that person.
+  
+  **The Earned Income Tax Credit (EITC)** If you receive the Earned Income Tax Credit, **DO NOT** count that income. Even if you receive a portion of the Earned Income Tax Credit in your paycheck every month, *DO NOT* count that portion of your paycheck that comes from the EITC. 
+  
+  **Income diverted under SSI PASS** Some disabled persons who receive SSI income participate in the Plan to Achieve Self Sufficiency (PASS) program. The PASS program allows SSI recipients to work and earn some income without losing their SSI. If you or anyone else in your household has earned income through the PASS program, **DO NOT** count that income.
+  
+  **AmeriCorps Stipends** The AmeriCorps program is a federal volunteer program that pays volunteers a small stipend in exchange for a year of service. If you or anyone in your household is an AmeriCorps volunteer, **DO NOT** count any income from their AmeriCorps stipend.
+
+  **VISTA stipends** The Volunteers in Service to America (VISTA) Program pays volunteers a small stipend for their work. If anyone in your household is a VISTA volunteer, **DO NOT** count his or her stipend. 
+
+  **Other Volunteer Stipends** Some programs pay volunteers a small stipend for their volunteer work. If you or anyone in your household has income from any of the following programs, **DO NOT** count that income:
+  <ul>
+  <li>University Year for Action
+  <li>Urban Crime Prevention Program
+  <li>Foster Grandparents Program
+  <li>Senior Companion Program
+  <li>Retired Senior Volunteer Program (RSVP)
+  <li>Older American Volunteer Program
+  </ul>
 
 ---
 id: downloadChoice
@@ -221,9 +269,11 @@ comment: |
 question: |
 subquestion: |
   % if FinalResult <= 0:
+  **TODO**
+  
   ####You do not seem to be eligible for SNAP benefits. There may still be other programs and resources that can help - learn more from <a href="https://maineequaljustice.org/help-is-available/food-security/#:~:text=Here%20are%20some%20ways%20to%20apply%3A%201%20You,go%20to%20My%20Maine%20Connection%20and%20apply%20online">Maine Equal Justice</a> or <a href="https://www.gsfb.org/food-map/">find a food pantry near you</a>.
   % else:
-  ####You may be eligible for SNAP benefits.
+  ####You may be eligible for FAP benefits.
   ####If you apply and are approved, your benefit may be <span style="color: green">${ currency(FinalResult) }</span> per month.<br>
   % endif
 
