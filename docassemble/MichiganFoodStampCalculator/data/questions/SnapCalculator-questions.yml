@@ -55,7 +55,10 @@ fields:
       - Yes
       - No
   - note: |
+      <hr>
       <h2>Income</h2>
+
+      ${ collapse_template(income_calculation_help) }
       
       <strong>Enter Gross __*Unearned*__ Income</strong><br>
       Examples: Unemployment Insurance Benefits, SSI, Social Security Disability Insurance (SSDI) or Retirement, Pensions, Veterans Benefits, Child Support, State Disability Assistance (SDA), Rental Income, cash assistance like TANF, FIP, or SFA, etc.
@@ -87,6 +90,7 @@ fields:
     js show if: |
       val('hasDependent') != null && val('Uneared_Income') == "Wkly"
   - note: |  
+      <hr>
       <strong>Enter Gross __*Earned*__ Income</strong><br>
       Wages or salaries. For self employment, including independent contractors, enter your average monthly net income (your gross income minus your business expenses).
 
@@ -115,6 +119,7 @@ fields:
     js show if: |
       val('hasDependent') != null && val('Earned_Income') == 'Wkly'
   - note: |
+      <hr>
       <h2>Expenses</h2>
       
       <strong>Enter Monthly Child Support Amount</strong>  
@@ -151,6 +156,7 @@ fields:
     js show if: |
       val('Earned_Income') != null && val('hasDependent') == 'Yes'
   - note: |
+      <hr>
       <h2>Shelter Expenses</h2>
       
       <strong>Information about your costs of living.</strong>  
@@ -215,6 +221,21 @@ auto terms:
   homeowner expenses: |
     You can count any recurring charges like mortgage, condo fees, mandatory association fees, property taxes, insurance, electricity, gas, heating/cooling costs, cooking fuel, water, sewer, and trash collection AND repair costs if the damage was caused by a natural disaster.
 continue button label: See Results
+
+---
+template: income_calculation_help
+subject: |
+  What if I have multiple types of income?
+content: |
+  If you have multiple sources of earned or unearned income, you should enter the total amounts below.
+
+  If you have multiple types of income that have different payment frequencies, you will need to convert the amounts.
+
+  To get a **monthly** amount for different payment frequencies:
+  
+  * If a payment is **weekly**, multiply that value by 4.33 to get the _monthly_ amount. 
+  * If a payment is **biweekly** (every 2 weeks), multiply that value by 2.17 to get the _monthly_ amount.
+  * If a payment is **twice per month**, multiply that value by 2 to get the _monthly_ amount. 
 
 ---
 template: unearned_income_exceptions
