@@ -36,7 +36,6 @@ question: |
 subquestion: |
   **<span>[${as_of_date}]</span>**
 
-  <br />
 fields:
   - note: |
       <h2>Household Composition</h2>
