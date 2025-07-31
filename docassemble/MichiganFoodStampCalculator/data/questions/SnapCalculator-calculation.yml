@@ -1,18 +1,22 @@
 ---
 code: |
+  #paysAC = "No"
+  #paysElec = "No"
+  #paysTelephone = "No"
   # Set defaults for Conditionally hidden fields.
-  if isHomeless == "Yes":  
-    paysAC = "No"
-    paysElec = "No"
-    paysTelephone = "No"
-  else:
-    if paysAC == "Yes":
-      paysElec = "No"
-      paysTelephone = "No"
-    elif paysElec == "Yes":
-      paysTelephone = "No"
+  #if isHomeless == "Yes":  
+  #  paysAC = "No"
+  #  paysElec = "No"
+  #  paysTelephone = "No"
+  #else:
+  #  if paysAC == "Yes":
+  #    paysElec = "No"
+  #    paysTelephone = "No"
+  #  elif paysElec == "Yes":
+  #    paysTelephone = "No"
 
   # Step 1. Household - nothing to do here.
+  
   # Step 2. Gross Income Test
   #2.1 Convert weekly and biweekly income to monthly amount
   WUIC = WUI * 4.333    
@@ -85,23 +89,36 @@ code: |
     TotShelterDed = RentMortgageDed + HomeownerDed
   
 	StdUtilAllowance = 0
-  if paysAC == "Yes":
-		UtilStatus = "Heating"
-		StdUtilAllowance = arrStdUtilAllowance[0]
-	elif paysElec == "Yes":
-		UtilStatus = "Non-heating"
-		StdUtilAllowance = arrStdUtilAllowance[1]
-	elif paysTelephone == "Yes":
-		UtilStatus = "Telephone"
-		StdUtilAllowance = arrStdUtilAllowance[3]
-	else:
-		UtilStatus = "Zero Expense"
-		StdUtilAllowance = arrStdUtilAllowance[2]
+  tempUtilityList = []
+  utilityList = "None"
+  
+  if rentOrMortgage == "Yes" and paysAC == "Yes":
+    StdUtilAllowance += SHELTER_HEAT_UTILITY
+  if rentOrMortgage == "No":
+    if utilitiesPaid['electricity']:
+      StdUtilAllowance += SHELTER_ELECTRICITY
+      tempUtilityList.append('Non-heat Electric ($' + str(SHELTER_ELECTRICITY) + ')')
+    if utilitiesPaid['water']:
+      StdUtilAllowance += SHELTER_WATER
+      tempUtilityList.append('Water ($' + str(SHELTER_WATER) + ')')
+    if utilitiesPaid['phone']:
+      StdUtilAllowance += SHELTER_PHONE
+      tempUtilityList.append('Phone ($' + str(SHELTER_PHONE) + ')')
+    if utilitiesPaid['fuel']:
+      StdUtilAllowance += SHELTER_FUEL
+      tempUtilityList.append('Cooking fuel ($' + str(SHELTER_FUEL) + ')')
+    if utilitiesPaid['trash']:
+      StdUtilAllowance += SHELTER_TRASH
+      tempUtilityList.append('Trash ($' + str(SHELTER_TRASH) + ')')
+    if utilitiesPaid.any_true():
+      utilityList = "\n".join(tempUtilityList)
+
   # special treatement for medical expense
 	TotShelterCosts = TotShelterDed + StdUtilAllowance
 	# 50% adjusted income calculations
 	FiftyPctAdjIC = PreAdjAfterDed * 0.50
 	# Shelter deduction in excess of 50% of adjusted income
+  InitialShelterDeduction = TotShelterCosts - FiftyPctAdjIC
 	ShelterDedExcessFiftyPct = max(0, TotShelterCosts - FiftyPctAdjIC)	
 	CapShelterDed = SHELTER_DED_CAP  
   # 3-2-A. Shelter Deduction Result
@@ -111,7 +128,7 @@ code: |
 		ShelterDedResult = min(ShelterDedExcessFiftyPct, CapShelterDed)
   # 3-2-B. Homeless Deduction
   if isHomeless == "Yes":
-    HomelessDed = HOMELESS_DED
+    HomelessDed = SHELTER_HOMELESS
   else:
     HomelessDed = 0
   # 3-3. Net Income Calculation

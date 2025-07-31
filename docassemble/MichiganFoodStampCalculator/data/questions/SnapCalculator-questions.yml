@@ -2,11 +2,12 @@
 mandatory: true
 code: |
   # Set Defaults for internal testing - comment out before release     
-  #ElderlyOrDisabled = "Yes"
+  #HHSize = 2
+  #ElderlyOrDisabled = "No"
   #isHomeless = "No"
   #hasDependent = "No"  
-  #Uneared_Income = "Mthly"
-  #Earned_Income = "biWkly"
+  #Uneared_Income = "None"
+  #Earned_Income = "None"
   #paysAC = "No"
   #paysElec = "No"
   #paysTelephone = "Yes"
@@ -169,44 +170,44 @@ fields:
       - No
     js show if: |
       val('ChildSupport') != null
+  - Does anyone in your household pay rent or a mortgage: rentOrMortgage
+    label above field: True
+    input type: radio
+    choices:
+      - Yes
+      - No
+    js show if: |
+      val('isHomeless') != null
   - Monthly rent or mortgage amount: RentMortgageDed
     datatype: currency        
     show if:
-      variable: isHomeless
-      is: No
+      variable: rentOrMortgage
+      is: Yes
   - Additional monthly homeowner expenses, including homeowner insurance and property tax: HomeownerDed
     datatype: currency        
     show if:
-      variable: isHomeless
-      is: No
-  # The below is for the standard heat and utility deduction. In the HotDocs version, this is
-  # only asked if the user does NOT pay rent or mortgage. 
-  - Does the household have any heat or air conditioning costs (any time of year), or did your household get fuel assistance (like LIHEAP) in the last 12 months?: paysAC
+      variable: rentOrMortgage
+      is: Yes
+  - Do you pay heat and cooling separately from your rent or mortgage?: paysAC
     label above field: True
     input type: radio
     choices:
       - Yes
       - No
     show if:
-      variable: isHomeless
-      is: No
-  - Does the household pay for electricity for non-heating purposes or for trash collection?: paysElec
+      variable: rentOrMortgage
+      is: Yes
+  - Which of the following utilities do you pay? _Select all that apply._: utilitiesPaid
+    datatype: checkboxes
     label above field: True
-    input type: radio
     choices:
-      - Yes
-      - No
+      - Non-heat electric: electricity
+      - Water / sewer: water
+      - Phone: phone
+      - Cooking fuel: fuel
+      - Garbage removal: trash
     show if:
-      variable: paysAC
-      is: No
-  - Does the household pay for its own telephone service?: paysTelephone
-    label above field: True
-    input type: radio
-    choices:
-      - Yes
-      - No
-    show if:
-      variable: paysElec
+      variable: rentOrMortgage
       is: No
 auto terms: 
   Household size: |
@@ -218,7 +219,7 @@ auto terms:
   legally obligated: |
     Only count child support that is paid under a court order. Voluntary payments or buying clothes, food, or other needs for children can’t be deducted here.
   homeowner expenses: |
-    You can count any recurring charges like mortgage, condo fees, mandatory association fees, property taxes, insurance, electricity, gas, heating/cooling costs, cooking fuel, water, sewer, and trash collection AND repair costs if the damage was caused by a natural disaster.
+    You can count any recurring charges like condo fees, mandatory association fees, property taxes, and homeowner insurance.
 continue button label: See Results
 
 ---
@@ -288,8 +289,13 @@ comment: |
   Display the major results on the screen, and let the user choose what to download.  
 question: |
 subquestion: |
-  % if FinalResult <= 0:
   **TODO**
+  
+  ApplyNetAssetTest: ${ ApplyNetAssetTest }
+  
+  FinalResult: ${ FinalResult }
+
+  % if FinalResult <= 0:
   
   ####You do not seem to be eligible for SNAP benefits. There may still be other programs and resources that can help - learn more from <a href="https://maineequaljustice.org/help-is-available/food-security/#:~:text=Here%20are%20some%20ways%20to%20apply%3A%201%20You,go%20to%20My%20Maine%20Connection%20and%20apply%20online">Maine Equal Justice</a> or <a href="https://www.gsfb.org/food-map/">find a food pantry near you</a>.
   % else:

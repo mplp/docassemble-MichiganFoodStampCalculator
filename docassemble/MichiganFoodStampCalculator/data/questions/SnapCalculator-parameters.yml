@@ -7,28 +7,28 @@ code: |
   # Parameters needing (semi)annual updates
   PCT_TO_EARNED_INCOME_DED = 0.20
   MEDICAL_THRESHOLD = 35
-  SHELTER_DED_CAP = 712          # BH: was 672
-  HOMELESS_DED = 190             # BH: was 179.66
+
+  # Shelter deductions (see RFT 255)
+  SHELTER_DED_CAP = 712
+  SHELTER_HOMELESS = 190
+  SHELTER_HEAT_UTILITY = 664
+  SHELTER_ELECTRICITY = 176
+  SHELTER_WATER = 115
+  SHELTER_PHONE = 30
+  SHELTER_FUEL = 32
+  SHELTER_TRASH = 29
+
   NET_INCOME_PCT = 0.30
   MINIMUM_SIZE_OF_HOUSEHOLD = 2  # BH: minimum check not done in HotDocs version
   MINIMUM_GRANT = 23             # BH: minimum check not done in HotDocs version
-  PHONE = 30                     # BH: was 58
-  # BH: HotDocs version includes water, internet, cooking fuel, & trash in addition to above
-  
-  NON_HEATING_UTILITY = 402      # BH: was 341. The value here is assumptively the sum of
-                                 # various deductions in the HotDocs version that are not
-                                 # individually accounted for in the docassemble version: 
-                                 #    176 (electric) 
-                                 #  + 115 (water)
-                                 #  +  50 (internet)
-                                 #  +  32 (cooking fuel)
-                                 #  +  29 (trash)
-  HEATING_UTILITY = 664          # BH: was 1011
+
+  # 200% poverty test
   arrTwoHundredTable = [2510, 3407, 4304, 5200, 6097, 6994, 7890, 8787, 897]
+  # Standard deduction (see RFT 255)
   arrStdDed = [204, 204, 204, 217, 254, 291]
+  # Poverty guidelines per household size
   arrMaxAllowableNIC = [1255, 1704, 2152, 2600, 3049, 3497, 3945, 4394, 449]
+  # Max benfit for household size (see RFT 260)
   arrMaxSNAPAllotment = [292, 536, 768, 975, 1158, 1390, 1536, 1756, 220]
-  # Standard utility allowance - heating, non-heating, zero util, telephone
-  arrStdUtilAllowance = [HEATING_UTILITY, NON_HEATING_UTILITY, 0.00, PHONE]
   # Asset test  
   AssetTest_Threshold = 4250     # BH: asset check not performed in HotDocs version, and effectively disabled here.

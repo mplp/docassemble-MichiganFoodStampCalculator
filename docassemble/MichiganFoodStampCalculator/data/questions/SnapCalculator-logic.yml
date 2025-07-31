@@ -62,9 +62,9 @@ code: |
   
   #Final screen
   if print_options['Summary'] == True or print_options['Details'] == True or print_options['Inputs'] == True:
-    downloadMe    
-  else:    
-    textOnly              
+    downloadMe
+  else:
+    textOnly
 
 ---
 # overrides framework question.
@@ -187,6 +187,7 @@ attachment:
   name: SNAP Results 
   filename: SNAP-Calculator-Results
   valid formats:
+      - docx
       - pdf
   docx template file: 
     code: |
@@ -214,5 +215,3 @@ code: |
     finalFile = "snap-details.docx"
   elif print_options['Inputs']:        
     finalFile = "snap-dhhsInputs.docx"
-
-
