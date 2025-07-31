@@ -7,6 +7,7 @@ code: |
   # Parameters needing (semi)annual updates
   PCT_TO_EARNED_INCOME_DED = 0.20
   MEDICAL_THRESHOLD = 35
+  MEDICAL_STANDARD = 165
 
   # Shelter deductions (see RFT 255)
   SHELTER_DED_CAP = 712

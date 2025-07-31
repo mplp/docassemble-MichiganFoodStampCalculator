@@ -132,11 +132,11 @@ fields:
   - note: |
       <strong>Enter Monthly Medical Costs</strong>
       For people over 60 or people who get a disability-based benefit, Michigan allows deductions for out-of-pocket medical expenses that are more than $35/month. Put your total monthly out-of-pocket medical expenses and we’ll calculate what deduction you’re eligible for.
+
+      ${ collapse_template(medical_expenses_help) }
+
+      The standard medical deduction is $165 for expenses over $35. If you have actual medical expenses that are more than $165, you can deduct the entire expense, minus $35, if you can verify the expenses.
       
-      Examples include but are not limited to: Medical insurance premiums, dental or medical care (including attendant care) costs not covered by insurance; prescription and over the counter medications; medical supplies and equipment; Medicare and other insurance premiums; food and vet bills for a trained service animal; dentures, hearing aids, and prosthetics; transportation and lodging costs to obtain medical treatment.
-      
-    # I suggest adding a note or "auto term" or something similar here proving examples of 
-    # disability-based benefits, such as SSI, SSD, or Vetera's Disability. 
     js show if: |
       val('Earned_Income') != null && val('ElderlyOrDisabled') == 'Yes'
   - Monthly medical costs: MedDed
@@ -222,6 +222,23 @@ auto terms:
     You can count any recurring charges like condo fees, mandatory association fees, property taxes, and homeowner insurance.
 continue button label: See Results
 
+---
+template: medical_expenses_help
+subject: |
+  What are some examples of medical expenses that can be deducted?
+content: |
+  Examples include but are not limited to: 
+  <ul>
+  <li>Medical insurance premiums, dental or medical care (including attendant care) costs not covered by insurance
+  <li>Prescription and over the counter medications
+  <li>Medical supplies and equipment
+  <li>Medicare and other insurance premiums
+  <li>Food and vet bills for a trained service animal
+  <li>Dentures, hearing aids, and prosthetics
+  <li>Transportation and lodging costs to obtain medical treatment
+  <li>Costs employing an attendant, homemaker, home health aide, housekeeper, home help provider, or child care provider due to age, infirmity or illness
+  </ul>
+  
 ---
 template: income_calculation_help
 subject: |

@@ -60,15 +60,21 @@ code: |
    StdDed = arrStdDed[5]
   # 3-1-B. Earned income deduction
   EarnedDed = GMEI * PCT_TO_EARNED_INCOME_DED
-  #NOTE TO JACK: Maine calculates this differently - if less than 35, 0 - if more than, subtract 35
-  # 3-1-C. Medical deductions  
+  
+  # 3-1-C. Medical deductions
+  # The SMD is $165 for expenses over $35, if the visitor has an actual medical expense that is more than the SMD, they can deduct the entire expense, minus $35, if they can verify it. 
   ExcessMedDed = 0
   if ElderlyOrDisabled == "Yes":	  
     ElderlyOrDisabled1 = "Yes" #for 2nd display in docx.
     if MedDed < MEDICAL_THRESHOLD:
       ExcessMedDed = 0.00
-    elif MedDed > MEDICAL_THRESHOLD:
+    elif MedDed >= (MEDICAL_STANDARD + MEDICAL_THRESHOLD):
       ExcessMedDed = MedDed - MEDICAL_THRESHOLD
+    # between the ranges - don't use the SMD if the actual is more.
+    # i.e. if expenses are 180, use the SMD instead of 180 - 35 (which would be LESS than SMD)
+    else:
+      ExcessMedDed = MedDed
+    
     #temp = MedDed - MEDICAL_THRESHOLD
     #if MedDed > 190:	
     #  ExcessMedDed = temp			
