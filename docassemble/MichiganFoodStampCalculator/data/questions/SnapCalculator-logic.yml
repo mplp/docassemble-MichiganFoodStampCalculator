@@ -54,18 +54,13 @@ code: |
 
   #Question screen
   HHSize
-  set_progress(75)
   
-  #Print option screen
-  print_options
   set_progress(100)
+  finalScreen
   
-  #Final screen
-  if print_options['Summary'] == True or print_options['Details'] == True or print_options['Inputs'] == True:
-    downloadMe
-  else:
-    textOnly
-
+  #saving answers???
+  #recommend this resource???
+  
 ---
 # overrides framework question.
 # This can be used as the very first screen for an interview.
@@ -167,50 +162,55 @@ content: |
   Most qualified immigrants are eligible for food assistance. If you have questions about how a person’s immigration status affects food benefits eligibility, contact legal services in your area. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office near you.
 
 ---
-id: chose-no-download
-event: textOnly
+id: downloadChoice
+event: finalScreen
+comment: |
+  Display the major results on the screen, and let the user choose what to download.  
 question: |
-  You have successfully completed the calculation. 
-subquestion: |  
+subquestion: |
+  % if FinalResult <= 0:
+  
+  ###You do not seem to be eligible for FAP  benefits. 
+  
+  Visit [An Overview of the Food Assistance Program (FAP, Food Stamps)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) on MichiganLegalHelp.org to learn more about the FAP program and eligibility. You may be eligible for [additional food assistance resources](https://www.michigan.gov/mdhhs/assistance-programs/food).
+
   You can user the ${ MLH_back_button_label } button to revise your input, or restart a new interview. 
+  % else:
+  ###You may be eligible for FAP benefits.
+  
+  #####If you apply and are approved, your benefit may be <span style="color: green">${ currency(FinalResult) }</span> per month.<br>
+  % endif
+
+  #####You can download or email a summary and detailed calculation below. 
+    
+  ${ AssetTestScreenMsg }
+
+  ${ al_user_bundle.download_list_html() }
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+
 buttons: 
   - Exit: exit
   - Restart: restart
+
 ---
-id: chose-download
-event: downloadMe 
-question: |
-  You have successfully completed the calculation.<br /></br />
-  Download your results below.
+# Bundles group the ALDocuments into separate downloads, such as for court and for the user
+objects:
+  - al_user_bundle: >-
+      ALDocumentBundle.using(elements=[FAP_Calculator_Results],
+      filename="fee_waiver_request_packet", title="All forms and instructions",
+      enabled=True)
+---
+# ALDocument objects specify the metadata for each template
+objects:
+  - FAP_Calculator_Results: >-
+      ALDocument.using(title="FAP Calculator Results", 
+      filename="FAP Calculator Results", enabled=True, has_addendum=False,
+      default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+---
 attachment:
-  name: SNAP Results 
-  filename: SNAP-Calculator-Results
-  valid formats:
-      - docx
-      - pdf
-  docx template file: 
-    code: |
-      finalFile
-buttons:
-  - Exit: exit
-  - Restart: restart  
----
-code: |  
-  # Count number of selections
-  totalSelection = 0
-  if print_options['Summary']:
-    totalSelection += 1
-  if print_options['Details']:
-    totalSelection += 1
-  if print_options['Inputs']:
-    totalSelection += 1
-    
-  # define document template file 
-  if totalSelection >1 :
-    finalFile = "snap-all.docx"
-  elif print_options['Summary']:
-    finalFile= "snap-summary.docx"
-  elif print_options['Details']:        
-    finalFile = "snap-details.docx"
-  elif print_options['Inputs']:        
-    finalFile = "snap-dhhsInputs.docx"
+  name: FAP Results 
+  filename: FAP_Calculator_Results_file
+  variable name: FAP_Calculator_Results[i]
+  docx template file: 'snap-summary.docx'
+  skip undefined: False

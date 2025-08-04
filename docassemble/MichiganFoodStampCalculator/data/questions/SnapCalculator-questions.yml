@@ -299,33 +299,3 @@ content: |
   <li>Retired Senior Volunteer Program (RSVP)
   <li>Older American Volunteer Program
   </ul>
-
----
-id: downloadChoice
-comment: |
-  Display the major results on the screen, and let the user choose what to download.  
-question: |
-subquestion: |
-  **TODO**
-  
-  ApplyNetAssetTest: ${ ApplyNetAssetTest }
-  
-  FinalResult: ${ FinalResult }
-
-  % if FinalResult <= 0:
-  
-  ####You do not seem to be eligible for SNAP benefits. There may still be other programs and resources that can help - learn more from <a href="https://maineequaljustice.org/help-is-available/food-security/#:~:text=Here%20are%20some%20ways%20to%20apply%3A%201%20You,go%20to%20My%20Maine%20Connection%20and%20apply%20online">Maine Equal Justice</a> or <a href="https://www.gsfb.org/food-map/">find a food pantry near you</a>.
-  % else:
-  ####You may be eligible for FAP benefits.
-  ####If you apply and are approved, your benefit may be <span style="color: green">${ currency(FinalResult) }</span> per month.<br>
-  % endif
-
-  ${ AssetTestScreenMsg }
-fields:
-  - Learn more or print results: print_options
-    datatype: checkboxes
-    choices:
-      - Summary of possible SNAP benefits and how to apply: Summary
-      - Calculation Details: Details
-      - View DHHS Inputs: Inputs   
-continue button label: Finish
