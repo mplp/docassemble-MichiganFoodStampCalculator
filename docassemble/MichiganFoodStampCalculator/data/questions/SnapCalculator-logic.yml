@@ -162,7 +162,7 @@ content: |
   Most qualified immigrants are eligible for food assistance. If you have questions about how a person’s immigration status affects food benefits eligibility, contact legal services in your area. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office near you.
 
 ---
-id: downloadChoice
+id: DownloadScreen
 event: finalScreen
 comment: |
   Display the major results on the screen, and let the user choose what to download.  
