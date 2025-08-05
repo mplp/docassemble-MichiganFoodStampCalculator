@@ -62,18 +62,27 @@ code: |
   EarnedDed = GMEI * PCT_TO_EARNED_INCOME_DED
   
   # 3-1-C. Medical deductions
-  # The SMD is $165 for expenses over $35, if the visitor has an actual medical expense that is more than the SMD, they can deduct the entire expense, minus $35, if they can verify it. 
+  # The SMD is $165 for expenses over $35, if the visitor has an actual medical expense that 
+  # is more than the SMD, they can deduct the entire expense, minus $35, if they can verify it. 
   ExcessMedDed = 0
+  ExcessMedTag = ""
   if ElderlyOrDisabled == "Yes":	  
     ElderlyOrDisabled1 = "Yes" #for 2nd display in docx.
     if MedDed < MEDICAL_THRESHOLD:
       ExcessMedDed = 0.00
+    # Over the SMD. Subtract 35 if that will result in something greater than SMD
+    # i.e. if expenses are 220, the deduction will be 220 - 35 = 185
     elif MedDed >= (MEDICAL_STANDARD + MEDICAL_THRESHOLD):
       ExcessMedDed = MedDed - MEDICAL_THRESHOLD
-    # between the ranges - don't use the SMD if the actual is more.
-    # i.e. if expenses are 180, use the SMD instead of 180 - 35 (which would be LESS than SMD)
-    else:
+      ExcessMedTag = f" (You must be able to verify expenses over ${ MEDICAL_STANDARD })"
+    # Over the SMD but don't want to subtract 35.
+    # i.e. if expenses are 180, use the SMD instead of 180 - 35 (145, which is LESS than SMD)
+    elif MedDed > MEDICAL_STANDARD:
       ExcessMedDed = MedDed
+      ExcessMedTag = f" (You must be able to verify expenses over ${ MEDICAL_STANDARD })"
+    # Use SMD
+    else:
+      ExcessMedDed = MEDICAL_STANDARD
     
     #temp = MedDed - MEDICAL_THRESHOLD
     #if MedDed > 190:	

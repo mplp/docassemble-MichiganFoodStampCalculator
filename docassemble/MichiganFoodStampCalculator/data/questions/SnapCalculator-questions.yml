@@ -131,7 +131,7 @@ fields:
       val('Earned_Income') != null
   - note: |
       <strong>Enter Monthly Medical Costs</strong>
-      For people over 60 or people who get a disability-based benefit, Michigan allows deductions for out-of-pocket medical expenses that are more than $35/month. Put your total monthly out-of-pocket medical expenses and we’ll calculate what deduction you’re eligible for.
+      For people over 60 or people who get a disability-based benefit, Michigan allows deductions for out-of-pocket medical expenses that are more than $35/month. Put your total monthly out-of-pocket medical expenses and we’ll calculate what deduction you’re eligible for. 
 
       ${ collapse_template(medical_expenses_help) }
 
