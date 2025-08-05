@@ -43,8 +43,10 @@ code: |
   resource_page_name = "Food Stamps (FAP)"
   survey_link_url_only = "https://www.surveymonkey.com/r/WFDJ5RY"
 ---
+###################### Main order ######################
 mandatory: true
 code: |
+  snapshot_start
   #Intro pages
   MLH_intro_landing
   MLH_agree_terms
@@ -56,6 +58,7 @@ code: |
   HHSize
   
   set_progress(100)
+  snapshot_download
   finalScreen
   
   #saving answers???
@@ -214,3 +217,13 @@ attachment:
   variable name: FAP_Calculator_Results[i]
   docx template file: 'snap-summary.docx'
   skip undefined: False
+
+---
+code: |
+  stuff_to_snapshot['zip'] = ''
+  stuff_to_snapshot['number_of_forms'] = 1
+  stuff_to_snapshot['end_time'] = str(current_datetime().format_datetime(format='yyyy-MM-dd h:mm a'))
+  if snapshot_dv_question == True:
+    stuff_to_snapshot['dv_present'] = showifdef('snapshot_dv_present')
+  reconsider('snapshot_interview_state')
+  snapshot_download = True
