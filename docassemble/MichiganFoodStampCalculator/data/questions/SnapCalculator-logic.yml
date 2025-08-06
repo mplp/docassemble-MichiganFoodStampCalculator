@@ -41,7 +41,14 @@ code: |
 code: |
   resource_page_url_only = "https://michiganlegalhelp.org/resources/public-assistance/food-stamps-fap"
   resource_page_name = "Food Stamps (FAP)"
-  survey_link_url_only = "https://www.surveymonkey.com/r/WFDJ5RY"
+  survey_link_url_only = "https://www.surveymonkey.com/r/SGV8XSK"
+---
+template: survey_embed_script
+content: |
+  <script>
+    (function(t,e,s,n){var o,a,c;t.SMCX=t.SMCX||[],e.getElementById(n)||(o=e.getElementsByTagName(s),a=o[o.length-1],c=e.createElement(s),c.type="text/javascript",c.async=!0,c.id=n,c.src="https://widget.surveymonkey.com/collect/website/js/tRaiETqnLgj758hTBazgdzxwuSQVZA5gS55pIr4pOSbBe0e24oUEB64wCHRpX8sy.js",a.parentNode.insertBefore(c,a))})(window,document,"script","smcx-sdk");
+  </script>
+
 ---
 ###################### Main order ######################
 mandatory: true
@@ -192,6 +199,9 @@ subquestion: |
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
 
+  <h2 class="h3">Take our quick survey!</h2>
+  Answer below or [open the survey in a new tab](${ survey_link_url_only }).
+  ${ survey_embed_script }
 buttons: 
   - Exit: exit
   - Restart: restart
