@@ -96,6 +96,7 @@ code: |
   totDeduction = StdDed + EarnedDed + ExcessMedDed + DepCareDed
   tempSum = TGMI - totDeduction
   PreAdjAfterDed = max(0, tempSum)
+  
   # 3.2 Expense Deductions
   # Shelter deductions
   if isHomeless == "Yes":  	  
@@ -106,6 +107,8 @@ code: |
 	StdUtilAllowance = 0
   tempUtilityList = []
   utilityList = "None"
+  tempUtilityListTextOnly = []
+  utilityListTextOnly = "None"
   
   if rentOrMortgage == "Yes" and paysAC == "Yes":
     StdUtilAllowance += SHELTER_HEAT_UTILITY
@@ -113,20 +116,26 @@ code: |
     if utilitiesPaid['electricity']:
       StdUtilAllowance += SHELTER_ELECTRICITY
       tempUtilityList.append('Non-heat Electric ($' + str(SHELTER_ELECTRICITY) + ')')
+      tempUtilityListTextOnly.append('Non-heat Electric')
     if utilitiesPaid['water']:
       StdUtilAllowance += SHELTER_WATER
       tempUtilityList.append('Water ($' + str(SHELTER_WATER) + ')')
+      tempUtilityListTextOnly.append('Water')
     if utilitiesPaid['phone']:
       StdUtilAllowance += SHELTER_PHONE
       tempUtilityList.append('Phone ($' + str(SHELTER_PHONE) + ')')
+      tempUtilityListTextOnly.append('Phone')
     if utilitiesPaid['fuel']:
       StdUtilAllowance += SHELTER_FUEL
       tempUtilityList.append('Cooking fuel ($' + str(SHELTER_FUEL) + ')')
+      tempUtilityListTextOnly.append('Cooking fuel')
     if utilitiesPaid['trash']:
       StdUtilAllowance += SHELTER_TRASH
       tempUtilityList.append('Trash ($' + str(SHELTER_TRASH) + ')')
+      tempUtilityListTextOnly.append('Trash')
     if utilitiesPaid.any_true():
       utilityList = "\n".join(tempUtilityList)
+      utilityListTextOnly = ", ".join(tempUtilityListTextOnly)
 
   # special treatement for medical expense
 	TotShelterCosts = TotShelterDed + StdUtilAllowance

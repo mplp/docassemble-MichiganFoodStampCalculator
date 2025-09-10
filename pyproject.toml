@@ -1,3 +1,28 @@
+license = "MIT"
+license-files = [
+    "LICENSE",
+]
+
 [build-system]
-requires = ["setuptools"]
+requires = [
+    "setuptools>=80.9.0",
+]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "docassemble.MichiganFoodStampCalculator"
+version = "0.0.1"
+description = "Michigan Food Stamp (FAP) Estimator"
+readme = "README.md"
+authors = [
+    { name = "Michigan Legal Help", email = "ekressmiller@mplp.org" },
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://michiganlegalhelp.org/resources/public-assistance/food-stamp-fap-calculator"
+
+[tool.setuptools.packages.find]
+where = [
+    ".",
+]

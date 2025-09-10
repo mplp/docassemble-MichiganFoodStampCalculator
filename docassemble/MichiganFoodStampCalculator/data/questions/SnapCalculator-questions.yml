@@ -4,7 +4,7 @@ code: |
   # Set Defaults for internal testing - comment out before release     
   #HHSize = 2
   #ElderlyOrDisabled = "No"
-  #isHomeless = "No"
+  ##isHomeless = "No"
   #hasDependent = "No"  
   #Uneared_Income = "None"
   #Earned_Income = "None"
