@@ -1,27 +1,33 @@
 ---
 code: |
+  #paysAC = "No"
+  #paysElec = "No"
+  #paysTelephone = "No"
   # Set defaults for Conditionally hidden fields.
-  if isHomeless == "Yes":  
-    paysAC = "No"
-    paysElec = "No"
-    paysTelephone = "No"
-  else:
-    if paysAC == "Yes":
-      paysElec = "No"
-      paysTelephone = "No"
-    elif paysElec == "Yes":
-      paysTelephone = "No"
+  #if isHomeless == "Yes":  
+  #  paysAC = "No"
+  #  paysElec = "No"
+  #  paysTelephone = "No"
+  #else:
+  #  if paysAC == "Yes":
+  #    paysElec = "No"
+  #    paysTelephone = "No"
+  #  elif paysElec == "Yes":
+  #    paysTelephone = "No"
 
   # Step 1. Household - nothing to do here.
+  
   # Step 2. Gross Income Test
   #2.1 Convert weekly and biweekly income to monthly amount
   WUIC = WUI * 4.333    
   biWUIC = biWUI * 2.17
   WEIC = WEI * 4.333
-  biWEIC = biWEI * 2.17  
+  biWEIC = biWEI * 2.17
+  
   #2.2 Gross Earned and Unearned amounts.   
   GMUI = round(MUI + WUIC + biWUIC, 0)
   GMEI = round(MEI + WEIC + biWEIC, 0)  
+  
   #2.3 Add up Unearned and Earned income
   TGMI = round(GMUI + GMEI - ChildSupport, 0)
   # 200% poverty level/gross income test for HH
@@ -29,42 +35,60 @@ code: |
     TwoHundredPctPov = arrTwoHundredTable[HHSize-1]
   else:            
    TwoHundredPctPov = arrTwoHundredTable[7]+((HHSize-8)*arrTwoHundredTable[8])
+  
   # Does Asset test apply?
   # IN MAINE THE ASSET TEST IS FUNCTIONALLY ABSENT. IF HH IS OVER ASSETS FOR FEDERAL SNAP MAINE STATE SNAP SUPPLEMENT WILL STILL BE APPLIED. CODE HERE ADJUSTED FOR MAINE.
   if ElderlyOrDisabled == "Yes" and TGMI > TwoHundredPctPov:
     ApplyAssetTest = "No"
     #"Yes, assets must be <=" + currency(AssetTest_Threshold)
-    ApplyNetAssetTest = "No"       
+    ApplyNetAssetTest = "No"
   else:
-    ApplyAssetTest = "No"  				
-	  ApplyNetAssetTest = "No"     
+    ApplyAssetTest = "No"
+	  ApplyNetAssetTest = "No"
+  
   # Gross Income Test Result
   #NOTE TO JACK: THIS IS NOT USED IN MAINE. EVERYONE IS SUBJECT TO GIT. HAVE ADJUSTED TO INCLUDE EVERYONE.
   #if ElderlyOrDisabled == "No":
   if TGMI < TwoHundredPctPov:
     GITResult = "PASSED"
   else:
-    GITResult = "FAILED"      	
+    GITResult = "FAILED"
   #else:
-    #GITResult = "PASSED"  
+    #GITResult = "PASSED"
   
   # Step 3. Net Income Test
   # 3-1-A. Standard Deduction
   if HHSize < 6:
     StdDed = arrStdDed[HHSize-1]
   else:
-   StdDed = arrStdDed[5]
+    StdDed = arrStdDed[5]
+  
   # 3-1-B. Earned income deduction
   EarnedDed = GMEI * PCT_TO_EARNED_INCOME_DED
-  #NOTE TO JACK: Maine calculates this differently - if less than 35, 0 - if more than, subtract 35
-  # 3-1-C. Medical deductions  
+  
+  # 3-1-C. Medical deductions
+  # The SMD is $165 for expenses over $35, if the visitor has an actual medical expense that 
+  # is more than the SMD, they can deduct the entire expense, minus $35, if they can verify it. 
   ExcessMedDed = 0
+  ExcessMedTag = ""
   if ElderlyOrDisabled == "Yes":	  
     ElderlyOrDisabled1 = "Yes" #for 2nd display in docx.
     if MedDed < MEDICAL_THRESHOLD:
       ExcessMedDed = 0.00
-    elif MedDed > MEDICAL_THRESHOLD:
+    # Over the SMD. Subtract 35 if that will result in something greater than SMD
+    # i.e. if expenses are 220, the deduction will be 220 - 35 = 185
+    elif MedDed >= (MEDICAL_STANDARD + MEDICAL_THRESHOLD):
       ExcessMedDed = MedDed - MEDICAL_THRESHOLD
+      ExcessMedTag = f" (You must be able to verify expenses over ${ MEDICAL_STANDARD })"
+    # Over the SMD but don't want to subtract 35.
+    # i.e. if expenses are 180, use the SMD instead of 180 - 35 (145, which is LESS than SMD)
+    elif MedDed > MEDICAL_STANDARD:
+      ExcessMedDed = MedDed
+      ExcessMedTag = f" (You must be able to verify expenses over ${ MEDICAL_STANDARD })"
+    # Use SMD
+    else:
+      ExcessMedDed = MEDICAL_STANDARD
+    
     #temp = MedDed - MEDICAL_THRESHOLD
     #if MedDed > 190:	
     #  ExcessMedDed = temp			
@@ -77,45 +101,91 @@ code: |
   totDeduction = StdDed + EarnedDed + ExcessMedDed + DepCareDed
   tempSum = TGMI - totDeduction
   PreAdjAfterDed = max(0, tempSum)
-  # 3.2 Expense Deductions
-  # Shelter deductions
-  if isHomeless == "Yes":  	  
-    TotShelterDed = 0       
-  else:
-    TotShelterDed = RentMortgageDed + HomeownerDed
   
+  # 3-2 Expense Deductions
+  # Shelter deductions
+  #if isHomeless == "Yes":  	  
+  #  TotShelterDed = 0       
+  #else:
+  #  TotShelterDed = RentMortgageDed + HomeownerDed
+  if rentOrMortgage == "Yes":
+    TotShelterDed = RentMortgageDed + HomeownerDed
+  else:
+    TotShelterDed = 0
+
+  # Utility deduction
 	StdUtilAllowance = 0
-  if paysAC == "Yes":
-		UtilStatus = "Heating"
-		StdUtilAllowance = arrStdUtilAllowance[0]
-	elif paysElec == "Yes":
-		UtilStatus = "Non-heating"
-		StdUtilAllowance = arrStdUtilAllowance[1]
-	elif paysTelephone == "Yes":
-		UtilStatus = "Telephone"
-		StdUtilAllowance = arrStdUtilAllowance[3]
-	else:
-		UtilStatus = "Zero Expense"
-		StdUtilAllowance = arrStdUtilAllowance[2]
-  # special treatement for medical expense
+  tempUtilityList = []
+  utilityList = "None"
+  tempUtilityListTextOnly = []
+  utilityListTextOnly = "None"
+  
+  if rentOrMortgage == "Yes" and paysAC == "Yes":
+    StdUtilAllowance += SHELTER_HEAT_UTILITY
+  if rentOrMortgage == "No":
+    if utilitiesPaid['electricity']:
+      StdUtilAllowance += SHELTER_ELECTRICITY
+      tempUtilityList.append('Non-heat Electric ($' + str(SHELTER_ELECTRICITY) + ')')
+      tempUtilityListTextOnly.append('Non-heat Electric')
+    if utilitiesPaid['water']:
+      StdUtilAllowance += SHELTER_WATER
+      tempUtilityList.append('Water ($' + str(SHELTER_WATER) + ')')
+      tempUtilityListTextOnly.append('Water')
+    if utilitiesPaid['phone']:
+      StdUtilAllowance += SHELTER_PHONE
+      tempUtilityList.append('Phone ($' + str(SHELTER_PHONE) + ')')
+      tempUtilityListTextOnly.append('Phone')
+    if utilitiesPaid['fuel']:
+      StdUtilAllowance += SHELTER_FUEL
+      tempUtilityList.append('Cooking fuel ($' + str(SHELTER_FUEL) + ')')
+      tempUtilityListTextOnly.append('Cooking fuel')
+    if utilitiesPaid['trash']:
+      StdUtilAllowance += SHELTER_TRASH
+      tempUtilityList.append('Trash ($' + str(SHELTER_TRASH) + ')')
+      tempUtilityListTextOnly.append('Trash')
+    if utilitiesPaid.any_true():
+      utilityList = "\t".join(tempUtilityList)
+      utilityListTextOnly = ", ".join(tempUtilityListTextOnly)
+
+  # 3-2-A. Total Shelter Costs
 	TotShelterCosts = TotShelterDed + StdUtilAllowance
 	# 50% adjusted income calculations
 	FiftyPctAdjIC = PreAdjAfterDed * 0.50
 	# Shelter deduction in excess of 50% of adjusted income
+  InitialShelterDeduction = TotShelterCosts - FiftyPctAdjIC
 	ShelterDedExcessFiftyPct = max(0, TotShelterCosts - FiftyPctAdjIC)	
-	CapShelterDed = SHELTER_DED_CAP  
-  # 3-2-A. Shelter Deduction Result
+	CapShelterDed = SHELTER_DED_CAP
+  
+  # 3-2-B. Shelter Deduction Result
 	if ElderlyOrDisabled == "Yes":
 		ShelterDedResult = ShelterDedExcessFiftyPct
 	else:
 		ShelterDedResult = min(ShelterDedExcessFiftyPct, CapShelterDed)
-  # 3-2-B. Homeless Deduction
+    
+  # Homeless Deduction
   if isHomeless == "Yes":
-    HomelessDed = HOMELESS_DED
+    HomelessDed = SHELTER_HOMELESS
   else:
     HomelessDed = 0
+
+  # 3-2-C. Total Shelter Deduction. BEM 554 states that an individual can choose between their 
+  # shelter expenses or the homeless deduction (if both are applicable).
+  # For the purposes of this tool, we will automatically use whichever is higher.
+  ShelterNote = ""
+  if ShelterDedResult > 0 and HomelessDed == 0:
+    TotalShelterDed = ShelterDedResult
+  elif ShelterDedResult == 0 and HomelessDed > 0:
+    TotalShelterDed = HomelessDed
+  elif HomelessDed > ShelterDedResult:
+    TotalShelterDed = HomelessDed
+    ShelterNote = "In your situation, the standard homeless deduction is higher than your shelter deductions, so it will be used in your Net Income Calculation. An MDHHS caseworker will ultimately give you a choice, but this tool uses the higher deduction."
+  else:
+    TotalShelterDed = ShelterDedResult
+    ShelterNote = "In your situation, your shelter deduction is greater than the standard homeless deduction, so it will be used in your Net Income Calculation. An MDHHS caseworker will ultimately give you a choice, but this tool uses the higher deduction."
+  
   # 3-3. Net Income Calculation
-  MonthlyNIC = PreAdjAfterDed - HomelessDed - ShelterDedResult
+  #MonthlyNIC = PreAdjAfterDed - HomelessDed - ShelterDedResult
+  MonthlyNIC = PreAdjAfterDed - TotalShelterDed
   MonthlyNICforDisplay = str(currency(round(MonthlyNIC,0)))
   MaxTotMonthlyNIC = 0
 	if ApplyNetAssetTest == "No":
@@ -130,14 +200,16 @@ code: |
     if(HHSize <= 8):
       MaxTotMonthlyNIC = arrMaxAllowableNIC[HHSize-1]
     else:
-      MaxTotMonthlyNIC = arrMaxAllowableNIC[7]+((HHSize-8)*arrMaxAllowableNIC[8])  
-  # 3-3. NET INCOME TEST result:	
+      MaxTotMonthlyNIC = arrMaxAllowableNIC[7]+((HHSize-8)*arrMaxAllowableNIC[8])
+      
+  # 3-3. NET INCOME TEST result
   if MaxTotMonthlyNIC >= 100000:
-		NICTestResult = "PASSED"    
+		NICTestResult = "PASSED"
 	elif MonthlyNIC < MaxTotMonthlyNIC:
-		NICTestResult = "PASSED"    
+		NICTestResult = "PASSED"
 	else:
 		NICTestResult = "FAILED"
+  
   # Step 4. Final Determination
   ThirtyPctNIC = max(0, round(MonthlyNIC * NET_INCOME_PCT,0));
 	if ThirtyPctNIC > 0:
@@ -150,11 +222,15 @@ code: |
 		MaxSNAPAllotment = arrMaxSNAPAllotment[7]+((HHSize-8)*arrMaxSNAPAllotment[8])
   tempFinal = MaxSNAPAllotment - Step41
   FinalResult = 0
+  MinimumGrantTag = ''
 	if GITResult == "PASSED" and NICTestResult == "PASSED":  		
     if HHSize <= MINIMUM_SIZE_OF_HOUSEHOLD: 
       FinalResult = max(tempFinal, MINIMUM_GRANT)
+      if MINIMUM_GRANT > tempFinal:
+        MinimumGrantTag = '(minimum grant)'
     else:
-      FinalResult = tempFinal  
+      FinalResult = tempFinal
+  
   # Asset test message
   if ApplyNetAssetTest == "Yes" and FinalResult > 0:   
     AssetTestScreenMsg = "To get SNAP benefits, your assets must be " + currency(AssetTest_Threshold) + " or less.  See the SNAP Advocacy Guide <a href='https://www.masslegalservices.org/FoodStampSNAPAdvocacyGuide'>masslegalservices.org/FoodStampSNAPAdvocacyGuide</a> for more information."

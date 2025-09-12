@@ -7,19 +7,29 @@ code: |
   # Parameters needing (semi)annual updates
   PCT_TO_EARNED_INCOME_DED = 0.20
   MEDICAL_THRESHOLD = 35
-  SHELTER_DED_CAP = 672
-  HOMELESS_DED = 179.66
+  MEDICAL_STANDARD = 165
+
+  # Shelter deductions (see RFT 255)
+  SHELTER_DED_CAP = 712
+  SHELTER_HOMELESS = 190
+  SHELTER_HEAT_UTILITY = 664
+  SHELTER_ELECTRICITY = 176
+  SHELTER_WATER = 115
+  SHELTER_PHONE = 30
+  SHELTER_FUEL = 32
+  SHELTER_TRASH = 29
+
   NET_INCOME_PCT = 0.30
-  MINIMUM_SIZE_OF_HOUSEHOLD = 2
-  MINIMUM_GRANT = 23
-  PHONE = 58
-  NON_HEATING_UTILITY = 341
-  HEATING_UTILITY = 1011  
+  MINIMUM_SIZE_OF_HOUSEHOLD = 2  # BH: minimum check not done in HotDocs version
+  MINIMUM_GRANT = 23             # BH: minimum check not done in HotDocs version
+
+  # 200% poverty test
   arrTwoHundredTable = [2510, 3407, 4304, 5200, 6097, 6994, 7890, 8787, 897]
+  # Standard deduction (see RFT 255)
   arrStdDed = [204, 204, 204, 217, 254, 291]
+  # Poverty guidelines per household size
   arrMaxAllowableNIC = [1255, 1704, 2152, 2600, 3049, 3497, 3945, 4394, 449]
+  # Max benfit for household size (see RFT 260)
   arrMaxSNAPAllotment = [292, 536, 768, 975, 1158, 1390, 1536, 1756, 220]
-  # Standard utility allowance - heating, non-heating, zero util, telephone
-  arrStdUtilAllowance = [HEATING_UTILITY, NON_HEATING_UTILITY, 0.00, PHONE]
   # Asset test  
-  AssetTest_Threshold = 4250
+  AssetTest_Threshold = 4250     # BH: asset check not performed in HotDocs version, and effectively disabled here.
