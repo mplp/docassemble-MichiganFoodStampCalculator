@@ -22,10 +22,12 @@ code: |
   WUIC = WUI * 4.333    
   biWUIC = biWUI * 2.17
   WEIC = WEI * 4.333
-  biWEIC = biWEI * 2.17  
+  biWEIC = biWEI * 2.17
+  
   #2.2 Gross Earned and Unearned amounts.   
   GMUI = round(MUI + WUIC + biWUIC, 0)
   GMEI = round(MEI + WEIC + biWEIC, 0)  
+  
   #2.3 Add up Unearned and Earned income
   TGMI = round(GMUI + GMEI - ChildSupport, 0)
   # 200% poverty level/gross income test for HH
@@ -33,31 +35,34 @@ code: |
     TwoHundredPctPov = arrTwoHundredTable[HHSize-1]
   else:            
    TwoHundredPctPov = arrTwoHundredTable[7]+((HHSize-8)*arrTwoHundredTable[8])
+  
   # Does Asset test apply?
   # IN MAINE THE ASSET TEST IS FUNCTIONALLY ABSENT. IF HH IS OVER ASSETS FOR FEDERAL SNAP MAINE STATE SNAP SUPPLEMENT WILL STILL BE APPLIED. CODE HERE ADJUSTED FOR MAINE.
   if ElderlyOrDisabled == "Yes" and TGMI > TwoHundredPctPov:
     ApplyAssetTest = "No"
     #"Yes, assets must be <=" + currency(AssetTest_Threshold)
-    ApplyNetAssetTest = "No"       
+    ApplyNetAssetTest = "No"
   else:
-    ApplyAssetTest = "No"  				
-	  ApplyNetAssetTest = "No"     
+    ApplyAssetTest = "No"
+	  ApplyNetAssetTest = "No"
+  
   # Gross Income Test Result
   #NOTE TO JACK: THIS IS NOT USED IN MAINE. EVERYONE IS SUBJECT TO GIT. HAVE ADJUSTED TO INCLUDE EVERYONE.
   #if ElderlyOrDisabled == "No":
   if TGMI < TwoHundredPctPov:
     GITResult = "PASSED"
   else:
-    GITResult = "FAILED"      	
+    GITResult = "FAILED"
   #else:
-    #GITResult = "PASSED"  
+    #GITResult = "PASSED"
   
   # Step 3. Net Income Test
   # 3-1-A. Standard Deduction
   if HHSize < 6:
     StdDed = arrStdDed[HHSize-1]
   else:
-   StdDed = arrStdDed[5]
+    StdDed = arrStdDed[5]
+  
   # 3-1-B. Earned income deduction
   EarnedDed = GMEI * PCT_TO_EARNED_INCOME_DED
   
@@ -97,13 +102,18 @@ code: |
   tempSum = TGMI - totDeduction
   PreAdjAfterDed = max(0, tempSum)
   
-  # 3.2 Expense Deductions
+  # 3-2 Expense Deductions
   # Shelter deductions
-  if isHomeless == "Yes":  	  
-    TotShelterDed = 0       
-  else:
+  #if isHomeless == "Yes":  	  
+  #  TotShelterDed = 0       
+  #else:
+  #  TotShelterDed = RentMortgageDed + HomeownerDed
+  if rentOrMortgage == "Yes":
     TotShelterDed = RentMortgageDed + HomeownerDed
-  
+  else:
+    TotShelterDed = 0
+
+  # Utility deduction
 	StdUtilAllowance = 0
   tempUtilityList = []
   utilityList = "None"
@@ -134,29 +144,48 @@ code: |
       tempUtilityList.append('Trash ($' + str(SHELTER_TRASH) + ')')
       tempUtilityListTextOnly.append('Trash')
     if utilitiesPaid.any_true():
-      utilityList = "\n".join(tempUtilityList)
+      utilityList = "\t".join(tempUtilityList)
       utilityListTextOnly = ", ".join(tempUtilityListTextOnly)
 
-  # special treatement for medical expense
+  # 3-2-A. Total Shelter Costs
 	TotShelterCosts = TotShelterDed + StdUtilAllowance
 	# 50% adjusted income calculations
 	FiftyPctAdjIC = PreAdjAfterDed * 0.50
 	# Shelter deduction in excess of 50% of adjusted income
   InitialShelterDeduction = TotShelterCosts - FiftyPctAdjIC
 	ShelterDedExcessFiftyPct = max(0, TotShelterCosts - FiftyPctAdjIC)	
-	CapShelterDed = SHELTER_DED_CAP  
-  # 3-2-A. Shelter Deduction Result
+	CapShelterDed = SHELTER_DED_CAP
+  
+  # 3-2-B. Shelter Deduction Result
 	if ElderlyOrDisabled == "Yes":
 		ShelterDedResult = ShelterDedExcessFiftyPct
 	else:
 		ShelterDedResult = min(ShelterDedExcessFiftyPct, CapShelterDed)
-  # 3-2-B. Homeless Deduction
+    
+  # Homeless Deduction
   if isHomeless == "Yes":
     HomelessDed = SHELTER_HOMELESS
   else:
     HomelessDed = 0
+
+  # 3-2-C. Total Shelter Deduction. BEM 554 states that an individual can choose between their 
+  # shelter expenses or the homeless deduction (if both are applicable).
+  # For the purposes of this tool, we will automatically use whichever is higher.
+  ShelterNote = ""
+  if ShelterDedResult > 0 and HomelessDed == 0:
+    TotalShelterDed = ShelterDedResult
+  elif ShelterDedResult == 0 and HomelessDed > 0:
+    TotalShelterDed = HomelessDed
+  elif HomelessDed > ShelterDedResult:
+    TotalShelterDed = HomelessDed
+    ShelterNote = "In your situation, the standard homeless deduction is higher than your shelter deductions, so it will be used in your Net Income Calculation. An MDHHS caseworker will ultimately give you a choice, but this tool uses the higher deduction."
+  else:
+    TotalShelterDed = ShelterDedResult
+    ShelterNote = "In your situation, your shelter deduction is greater than the standard homeless deduction, so it will be used in your Net Income Calculation. An MDHHS caseworker will ultimately give you a choice, but this tool uses the higher deduction."
+  
   # 3-3. Net Income Calculation
-  MonthlyNIC = PreAdjAfterDed - HomelessDed - ShelterDedResult
+  #MonthlyNIC = PreAdjAfterDed - HomelessDed - ShelterDedResult
+  MonthlyNIC = PreAdjAfterDed - TotalShelterDed
   MonthlyNICforDisplay = str(currency(round(MonthlyNIC,0)))
   MaxTotMonthlyNIC = 0
 	if ApplyNetAssetTest == "No":
@@ -171,14 +200,16 @@ code: |
     if(HHSize <= 8):
       MaxTotMonthlyNIC = arrMaxAllowableNIC[HHSize-1]
     else:
-      MaxTotMonthlyNIC = arrMaxAllowableNIC[7]+((HHSize-8)*arrMaxAllowableNIC[8])  
-  # 3-3. NET INCOME TEST result:	
+      MaxTotMonthlyNIC = arrMaxAllowableNIC[7]+((HHSize-8)*arrMaxAllowableNIC[8])
+      
+  # 3-3. NET INCOME TEST result
   if MaxTotMonthlyNIC >= 100000:
-		NICTestResult = "PASSED"    
+		NICTestResult = "PASSED"
 	elif MonthlyNIC < MaxTotMonthlyNIC:
-		NICTestResult = "PASSED"    
+		NICTestResult = "PASSED"
 	else:
 		NICTestResult = "FAILED"
+  
   # Step 4. Final Determination
   ThirtyPctNIC = max(0, round(MonthlyNIC * NET_INCOME_PCT,0));
 	if ThirtyPctNIC > 0:
@@ -198,7 +229,7 @@ code: |
       if MINIMUM_GRANT > tempFinal:
         MinimumGrantTag = '(minimum grant)'
     else:
-      FinalResult = tempFinal  
+      FinalResult = tempFinal
   
   # Asset test message
   if ApplyNetAssetTest == "Yes" and FinalResult > 0:   

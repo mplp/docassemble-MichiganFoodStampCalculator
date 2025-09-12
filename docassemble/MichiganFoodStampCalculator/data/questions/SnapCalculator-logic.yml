@@ -55,10 +55,10 @@ mandatory: true
 code: |
   snapshot_start
   #Intro pages
-  MLH_intro_landing
-  MLH_agree_terms
-  MLH_intro_navigate_save
-  household_and_eligibility
+  #MLH_intro_landing
+  #MLH_agree_terms
+  #MLH_intro_navigate_save
+  #household_and_eligibility
   set_progress(50)
 
   #Question screen
