@@ -1,7 +1,7 @@
 ---
 initial: True
 code: |
-  as_of_date = "Effective as of October 1, 2024"
+  RFT as_of_date = "Effective as of October 1, 2025"
   calcDate = today()
   
   # Parameters needing (semi)annual updates
@@ -10,26 +10,27 @@ code: |
   MEDICAL_STANDARD = 165
 
   # Shelter deductions (see RFT 255)
-  SHELTER_DED_CAP = 712
-  SHELTER_HOMELESS = 190
-  SHELTER_HEAT_UTILITY = 664
-  SHELTER_ELECTRICITY = 176
-  SHELTER_WATER = 115
-  SHELTER_PHONE = 30
-  SHELTER_FUEL = 32
-  SHELTER_TRASH = 29
+  SHELTER_DED_CAP = 744
+  SHELTER_HOMELESS = 199
+  SHELTER_HEAT_UTILITY = 682
+  SHELTER_ELECTRICITY = 181
+  SHELTER_WATER = 119
+  SHELTER_PHONE = 31
+  SHELTER_FUEL = 33
+  SHELTER_TRASH = 30
 
   NET_INCOME_PCT = 0.30
   MINIMUM_SIZE_OF_HOUSEHOLD = 2  # BH: minimum check not done in HotDocs version
   MINIMUM_GRANT = 23             # BH: minimum check not done in HotDocs version
 
-  # 200% poverty test
-  arrTwoHundredTable = [2510, 3407, 4304, 5200, 6097, 6994, 7890, 8787, 897]
+  # Poverty guidelines and 200% poverty test per household size  (see RFT 270)
+  #   Final value is calculated from (family size of 9) - (family size of 8)
+  arrMaxAllowableNIC = [1304, 1763, 2221, 2679, 3138, 3596, 4054, 4513, 458]
+  arrTwoHundredTable = [2608, 3526, 4442, 5358, 6276, 7192, 8108, 9026, 916]
+
   # Standard deduction (see RFT 255)
-  arrStdDed = [204, 204, 204, 217, 254, 291]
-  # Poverty guidelines per household size
-  arrMaxAllowableNIC = [1255, 1704, 2152, 2600, 3049, 3497, 3945, 4394, 449]
+  arrStdDed = [209, 209, 209, 223, 261, 299]
   # Max benfit for household size (see RFT 260)
-  arrMaxSNAPAllotment = [292, 536, 768, 975, 1158, 1390, 1536, 1756, 220]
+  arrMaxSNAPAllotment = [298, 546, 785, 994, 1183, 1421, 1571, 1789, 218]
   # Asset test  
   AssetTest_Threshold = 4250     # BH: asset check not performed in HotDocs version, and effectively disabled here.
