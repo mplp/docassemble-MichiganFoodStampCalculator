@@ -1,7 +1,7 @@
 ---
 initial: True
 code: |
-  RFT as_of_date = "Effective as of October 1, 2025"
+  as_of_date = "Effective as of October 1, 2025"
   calcDate = today()
   
   # Parameters needing (semi)annual updates
