@@ -21,7 +21,7 @@ code: |
 
   NET_INCOME_PCT = 0.30
   MINIMUM_SIZE_OF_HOUSEHOLD = 2  # BH: minimum check not done in HotDocs version
-  MINIMUM_GRANT = 23             # BH: minimum check not done in HotDocs version
+  MINIMUM_GRANT = 24             # BH: minimum check not done in HotDocs version
 
   # Poverty guidelines and 200% poverty test per household size  (see RFT 270)
   #   Final value is calculated from (family size of 9) - (family size of 8)
