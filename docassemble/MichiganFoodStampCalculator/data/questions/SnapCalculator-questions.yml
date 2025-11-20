@@ -40,8 +40,10 @@ subquestion: |
 fields:
   - note: |
       <h2>Household Composition</h2>
-  - Household size: HHSize  
-    datatype: integer    
+  - What is your {household size}?: HHSize
+    datatype: integer
+  - note: |
+      ${ prog_disclose(ineligible_household_member) }
   - Does the household include any members age 60+ or receiving a disability-based benefit?: ElderlyOrDisabled 
     label above field: True
     input type: radio
@@ -209,9 +211,19 @@ fields:
     show if:
       variable: rentOrMortgage
       is: No
+terms: 
+  household size: |
+    Your household includes everyone who:
+  
+    * lives with you, and 
+    * regularly buys and prepares food together. 
+
+    **Plus**, the following people are always included if they live with you (even if you don’t buy and prepare food together):
+  
+    * your spouse,
+    * your children under age 22, and 
+    * your other dependents under age 18 (for example: a niece or grandchild you care for, or a foster child)
 auto terms: 
-  Household size: |
-    Your FAP household is everyone who lives with you who regularly purchases and prepares food together.
   disability-based benefit: |
     For example: Supplemental Security Income (SSI), Social Security Disability (SSD), or Veteran's Disability benefits.
   child care or disabled adult care costs: |
@@ -221,6 +233,15 @@ auto terms:
   homeowner expenses: |
     You can count any recurring charges like condo fees, mandatory association fees, property taxes, and homeowner insurance.
 continue button label: See Results
+
+---
+template: ineligible_household_member
+subject: |
+  What if I think someone in my household is ineligible for food stamps?
+content: |
+  **Include** your **entire household** in your household size. Also include them in your answers about income and expenses. We’ll ask about eligibility at the end of the tool.
+  
+  As long as some of your household members are eligible, you may be able to get food stamps.
 
 ---
 template: medical_expenses_help
