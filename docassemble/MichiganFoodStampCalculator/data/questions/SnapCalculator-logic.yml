@@ -145,13 +145,17 @@ id: household and eligibility
 question: |
   Household Information and Eligibility
 subquestion: |
-  We need to know how many people are in your "household." Anyone who lives in your home should be counted as part of the household. This includes family members, friends, and people you are romantically seeing, like a boyfriend or girlfriend. 
+  According to food stamp rules, your **entire household** includes everyone who:
+  
+  * lives with you, and 
+  * regularly buys and prepares food together. 
 
-  Count people even if they rent a portion of your home, or if you are renting a portion of their home. 
+  **Plus**, the following people are always included if they live with you (even if you don’t buy and prepare food together):
+  
+  * your spouse,
+  * your children under age 22, and 
+  * your other dependents under age 18 (for example: a niece or grandchild you care for, or a foster child)
 
-  A good way to determine if someone is in your household is to ask if he or she lives in your home and shares a restroom or the kitchen with you, or if they buy and prepare food with you.
-
-  There are some people who cannot be counted as part of your household because they are not eligible to receive food stamps. Tap below for more information.
   
   ${ prog_disclose(eligibility_explanation) }
 continue button field: household_and_eligibility
