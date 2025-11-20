@@ -60,6 +60,8 @@ fields:
       <hr>
       <h2>Income</h2>
 
+      Include income for your {entire household}.
+      
       ${ collapse_template(income_calculation_help) }
       
       <strong>Enter Gross __*Unearned*__ Income</strong><br>
@@ -212,17 +214,20 @@ fields:
       variable: rentOrMortgage
       is: No
 terms: 
-  household size: |
-    Your household includes everyone who:
-  
-    * lives with you, and 
-    * regularly buys and prepares food together. 
+  - phrases:
+      - household size
+      - entire household
+    definition: |
+      Your household includes everyone who:
+    
+      * lives with you, and 
+      * regularly buys and prepares food together. 
 
-    **Plus**, the following people are always included if they live with you (even if you don’t buy and prepare food together):
+      **Plus**, the following people are always included if they live with you (even if you don’t buy and prepare food together):
   
-    * your spouse,
-    * your children under age 22, and 
-    * your other dependents under age 18 (for example: a niece or grandchild you care for, or a foster child)
+      * your spouse,
+      * your children under age 22, and 
+      * your other dependents under age 18 (for example: a niece or grandchild you care for, or a foster child)
 auto terms: 
   disability-based benefit: |
     For example: Supplemental Security Income (SSI), Social Security Disability (SSD), or Veteran's Disability benefits.
