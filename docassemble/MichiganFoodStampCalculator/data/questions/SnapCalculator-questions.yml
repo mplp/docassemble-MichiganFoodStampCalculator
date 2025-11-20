@@ -74,7 +74,7 @@ fields:
     input type: radio
     choices:
       - Monthly: Mthly
-      - Biweekly: biWkly   
+      - Every two weeks: biWkly   
       - Weekly: Wkly  
       - None: None
     js show if: |
@@ -83,7 +83,7 @@ fields:
     datatype: currency   
     js show if: |
       val('hasDependent') != null && val('Uneared_Income') == "Mthly"
-  - Biweekly amount: biWUI
+  - Amount every two weeks: biWUI
     datatype: currency
     step: 1
     js show if: |
@@ -105,7 +105,7 @@ fields:
     input type: radio
     choices:
       - Monthly: Mthly
-      - Biweekly: biWkly   
+      - Every two weeks: biWkly   
       - Weekly: Wkly 
       - None: None 
     js show if: |
@@ -114,7 +114,7 @@ fields:
     datatype: currency
     js show if: |
       val('hasDependent') != null && val('Earned_Income') == 'Mthly'
-  - Biweekly amount: biWEI
+  - Amount (very two weeks: biWEI
     datatype: currency  
     js show if: |
       val('hasDependent') != null && val('Earned_Income') == 'biWkly'
@@ -135,6 +135,7 @@ fields:
       val('Earned_Income') != null
   - note: |
       <strong>Enter Monthly Medical Costs</strong>
+      
       For people over 60 or people who get a disability-based benefit, Michigan allows deductions for out-of-pocket medical expenses that are more than $35/month. Put your total monthly out-of-pocket medical expenses and we’ll calculate what deduction you’re eligible for. 
 
       ${ collapse_template(medical_expenses_help) }
@@ -143,7 +144,8 @@ fields:
       
     js show if: |
       val('Earned_Income') != null && val('ElderlyOrDisabled') == 'Yes'
-  - Monthly medical costs: MedDed
+  - Monthly medical costs for people over 60 or who get a disability-based benefit:: MedDed
+    label above field: true
     datatype: currency        
     js show if: |
       val('Earned_Income') != null && val('ElderlyOrDisabled') == 'Yes'
@@ -277,7 +279,7 @@ content: |
   To get a **monthly** amount for different payment frequencies:
   
   * If a payment is **weekly**, multiply that value by 4.33 to get the _monthly_ amount. 
-  * If a payment is **biweekly** (every 2 weeks), multiply that value by 2.17 to get the _monthly_ amount.
+  * If a payment is **every two weeks** (biweekly), multiply that value by 2.17 to get the _monthly_ amount.
   * If a payment is **twice per month**, multiply that value by 2 to get the _monthly_ amount. 
 
 ---
