@@ -63,6 +63,7 @@ code: |
 
   #Question screen
   HHSize
+  ineligble_members
   
   set_progress(100)
   snapshot_download
@@ -171,9 +172,10 @@ content: |
   <li>People disqualified from receiving Food Stamps because the Michigan Department of Health and Human Services (MDHHS) says they did not cooperate with employment rules, child support rules, or other program requirements
   <li>People disqualified by MDHHS for an Intentional Program Violation or fraud
   <li>People disqualified by MDHHS because of certain criminal convictions such as Food Stamp trafficking
+  <li>Refugees and asylum seekers
   </ul>
 
-  Most qualified immigrants are eligible for food assistance. If you have questions about how a person’s immigration status affects food benefits eligibility, contact legal services in your area. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office near you.
+  Some qualified immigrants are eligible for food assistance. To learn more, read [Food Stamp Assistance for Immigrantes](https://michiganlegalhelp.org/resources/public-assistance/food-assistance-immigrants). If you have questions about how a person’s immigration status affects food benefits eligibility, contact legal services in your area. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office near you.
 
 ---
 id: DownloadScreen
@@ -182,7 +184,15 @@ comment: |
   Display the major results on the screen, and let the user choose what to download.  
 question: |
 subquestion: |
-  % if FinalResult <= 0:
+  % if ineligble_members and ineligble_member_count == HHSize:
+
+  ###Based on your answers, nobody in your household is eligible to receive food stamps. 
+  
+  Go back and change your answers above if you think this was a mistake.
+
+  Visit [An Overview of the Food Assistance Program (FAP, Food Stamps)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) on MichiganLegalHelp.org to learn more about the FAP program and eligibility. You may be eligible for [additional food assistance resources](https://www.michigan.gov/mdhhs/assistance-programs/food).
+
+  % elif FinalResult <= 0:
   
   ###You do not seem to be eligible for FAP  benefits. 
   
@@ -195,6 +205,7 @@ subquestion: |
   #####If you apply and are approved, your benefit may be <span style="color: green">${ currency(FinalResult) }</span> per month.<br>
   % endif
 
+  %if no_eligible_members == False:
   #####You can download or email a summary and detailed calculation below. 
     
   ${ AssetTestScreenMsg }
@@ -202,6 +213,7 @@ subquestion: |
   ${ al_user_bundle.download_list_html() }
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+  % endif
 
   <h2 class="h3">Take our quick survey!</h2>
   Answer below or [open the survey in a new tab](${ survey_link_url_only }).

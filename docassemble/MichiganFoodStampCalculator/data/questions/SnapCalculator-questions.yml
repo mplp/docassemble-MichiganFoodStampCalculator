@@ -240,6 +240,45 @@ auto terms:
   homeowner expenses: |
     You can count any recurring charges like condo fees, mandatory association fees, property taxes, and homeowner insurance.
 
+
+---
+question: |
+  Eligibility
+subquestion: |
+  If some of your household members are not eligible for food stamps, the food stamp calculation will be adjusted by MDHHS. **MDHHS will still want to know about their income and expenses.**
+
+fields:
+  - Are any of your ${ HHSize } household members **not** eligible for food stamps?: ineligble_members
+    input type: radio
+    choices:
+      - Yes, 1 or more household members are not eligible. : true
+      - No
+    label above field: True
+  - note: |
+      ${ prog_disclose(eligibility_explanation) }
+    show if: 
+      variable: ineligble_members
+      is: true
+  - How many of your ${ HHSize } household members are **not** eligible for food stamps?: ineligble_member_count
+    datatype: integer
+    code: |
+      range(1, HHSize+1)
+    show if: 
+      variable: ineligble_members
+      is: true
+
+---
+code: |
+  no_eligible_members = ineligble_members and ineligble_member_count == HHSize
+
+---
+template: ineligible_household_member
+subject: |
+  What if I think someone in my household is ineligible for food stamps?
+content: |
+  **Include** your **entire household** in your household size. Also include them in your answers about income and expenses. We’ll ask about eligibility at the end of the tool.
+  
+
 ---
 template: ineligible_household_member
 subject: |
