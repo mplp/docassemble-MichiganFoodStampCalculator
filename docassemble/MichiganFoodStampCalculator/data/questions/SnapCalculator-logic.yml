@@ -243,6 +243,7 @@ attachment:
   variable name: FAP_Calculator_Results[i]
   docx template file: 'snap-summary.docx'
   skip undefined: False
+  tagged pdf: True
 
 ---
 code: |
