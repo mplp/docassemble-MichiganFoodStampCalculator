@@ -15,7 +15,11 @@ code: |
   #  elif paysElec == "Yes":
   #    paysTelephone = "No"
 
-  # Step 1. Household - nothing to do here.
+  # Step 1. Household
+  # Calculate based on eligible HH members, if different from HHSize
+  HHSizeAdjusted = HHSize
+  if ineligble_members:
+    HHSizeAdjusted = HHSize - ineligble_member_count
   
   # Step 2. Gross Income Test
   #2.1 Convert weekly and biweekly income to monthly amount
@@ -31,10 +35,10 @@ code: |
   #2.3 Add up Unearned and Earned income
   TGMI = round(GMUI + GMEI - ChildSupport, 0)
   # 200% poverty level/gross income test for HH
-  if HHSize <= 8:
-    TwoHundredPctPov = arrTwoHundredTable[HHSize-1]
+  if HHSizeAdjusted <= 8:
+    TwoHundredPctPov = arrTwoHundredTable[HHSizeAdjusted-1]
   else:            
-   TwoHundredPctPov = arrTwoHundredTable[7]+((HHSize-8)*arrTwoHundredTable[8])
+   TwoHundredPctPov = arrTwoHundredTable[7]+((HHSizeAdjusted-8)*arrTwoHundredTable[8])
   
   # Does Asset test apply?
   # IN MAINE THE ASSET TEST IS FUNCTIONALLY ABSENT. IF HH IS OVER ASSETS FOR FEDERAL SNAP MAINE STATE SNAP SUPPLEMENT WILL STILL BE APPLIED. CODE HERE ADJUSTED FOR MAINE.
@@ -58,8 +62,8 @@ code: |
   
   # Step 3. Net Income Test
   # 3-1-A. Standard Deduction
-  if HHSize < 6:
-    StdDed = arrStdDed[HHSize-1]
+  if HHSizeAdjusted < 6:
+    StdDed = arrStdDed[HHSizeAdjusted-1]
   else:
     StdDed = arrStdDed[5]
   
@@ -197,10 +201,10 @@ code: |
   # the above 100000 is an arbitrarily large number so that no once can hit it.
 	if ApplyNetAssetTest == "Yes":
     MaxTotMonthlyNICLable = str(currency(round(MaxTotMonthlyNIC,0)))
-    if(HHSize <= 8):
-      MaxTotMonthlyNIC = arrMaxAllowableNIC[HHSize-1]
+    if(HHSizeAdjusted <= 8):
+      MaxTotMonthlyNIC = arrMaxAllowableNIC[HHSizeAdjusted-1]
     else:
-      MaxTotMonthlyNIC = arrMaxAllowableNIC[7]+((HHSize-8)*arrMaxAllowableNIC[8])
+      MaxTotMonthlyNIC = arrMaxAllowableNIC[7]+((HHSizeAdjusted-8)*arrMaxAllowableNIC[8])
       
   # 3-3. NET INCOME TEST result
   if MaxTotMonthlyNIC >= 100000:
@@ -216,15 +220,15 @@ code: |
 		Step41 = ThirtyPctNIC
 	else:
 		Step41 = 0.0
-	if HHSize <= 8:
-		MaxSNAPAllotment = arrMaxSNAPAllotment[HHSize-1]
+	if HHSizeAdjusted <= 8:
+		MaxSNAPAllotment = arrMaxSNAPAllotment[HHSizeAdjusted-1]
 	else:
-		MaxSNAPAllotment = arrMaxSNAPAllotment[7]+((HHSize-8)*arrMaxSNAPAllotment[8])
+		MaxSNAPAllotment = arrMaxSNAPAllotment[7]+((HHSizeAdjusted-8)*arrMaxSNAPAllotment[8])
   tempFinal = MaxSNAPAllotment - Step41
   FinalResult = 0
   MinimumGrantTag = ''
 	if GITResult == "PASSED" and NICTestResult == "PASSED":  		
-    if HHSize <= MINIMUM_SIZE_OF_HOUSEHOLD: 
+    if HHSizeAdjusted <= MINIMUM_SIZE_OF_HOUSEHOLD: 
       FinalResult = max(tempFinal, MINIMUM_GRANT)
       if MINIMUM_GRANT > tempFinal:
         MinimumGrantTag = '(minimum grant)'

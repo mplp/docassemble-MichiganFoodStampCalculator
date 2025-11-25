@@ -252,7 +252,7 @@ fields:
     input type: radio
     choices:
       - Yes, 1 or more household members are **not** eligible. : true
-      - No
+      - No, all ${ HHSize } members of my household **are** eligible. : false
     label above field: True
   - note: |
       ${ prog_disclose(eligibility_explanation) }
