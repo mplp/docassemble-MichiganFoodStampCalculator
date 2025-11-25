@@ -251,7 +251,7 @@ fields:
   - Are any of your ${ HHSize } household members **not** eligible for food stamps?: ineligble_members
     input type: radio
     choices:
-      - Yes, 1 or more household members are not eligible. : true
+      - Yes, 1 or more household members are **not** eligible. : true
       - No
     label above field: True
   - note: |

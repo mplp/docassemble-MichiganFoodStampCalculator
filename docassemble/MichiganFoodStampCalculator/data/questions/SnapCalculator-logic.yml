@@ -188,7 +188,7 @@ subquestion: |
 
   ###Based on your answers, nobody in your household is eligible to receive food stamps. 
   
-  Go back and change your answers above if you think this was a mistake.
+  Tap  ${ MLH_back_button_label } to go back and change your answers if you think this was a mistake.
 
   Visit [An Overview of the Food Assistance Program (FAP, Food Stamps)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) on MichiganLegalHelp.org to learn more about the FAP program and eligibility. You may be eligible for [additional food assistance resources](https://www.michigan.gov/mdhhs/assistance-programs/food).
 
