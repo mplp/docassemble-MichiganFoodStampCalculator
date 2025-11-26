@@ -23,10 +23,9 @@ code: |
   MINIMUM_SIZE_OF_HOUSEHOLD = 2  # BH: minimum check not done in HotDocs version
   MINIMUM_GRANT = 24             # BH: minimum check not done in HotDocs version
 
-  # Poverty guidelines and 200% poverty test per household size  (see RFT 270)
-  #   Final value is calculated from (family size of 9) - (family size of 8)
-  arrMaxAllowableNIC = [1304, 1763, 2221, 2679, 3138, 3596, 4054, 4513, 458]
-  arrTwoHundredTable = [2608, 3526, 4442, 5358, 6276, 7192, 8108, 9026, 916]
+  # FAP monthly and 200% income test per household size  (see RFT 250)
+  arrMaxAllowableNIC = [1305, 1763, 2221, 2680, 3138, 3596, 4055, 4513, 459]
+  arrTwoHundredTable = [2610, 3526, 4442, 5360, 6276, 7192, 8110, 9026, 918]
 
   # Standard deduction (see RFT 255)
   arrStdDed = [209, 209, 209, 223, 261, 299]
