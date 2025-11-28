@@ -248,28 +248,46 @@ subquestion: |
   If some of your household members are not eligible for food stamps, the food stamp calculation will be adjusted by MDHHS. **MDHHS will still want to know about their income and expenses.**
 
 fields:
-  - Are any of your ${ HHSize } household members **not** eligible for food stamps?: ineligble_members
+  - field: ineligble_members
+    label: |
+      % if HHSize == 1:
+        Are you eligible for food stamps?
+      % else:
+        Are any of your ${ HHSize } household members **not** eligible for food stamps?:
+      % endif
     input type: radio
-    choices:
-      - Yes, 1 or more household members are **not** eligible. : true
-      - No, all ${ HHSize } members of my household **are** eligible. : false
+    code: |
+      eligibility_options
     label above field: True
   - note: |
       ${ prog_disclose(eligibility_explanation) }
-    show if: 
-      variable: ineligble_members
-      is: true
   - How many of your ${ HHSize } household members are **not** eligible for food stamps?: ineligble_member_count
     datatype: integer
+    label above field: true
     code: |
       range(1, HHSize+1)
-    show if: 
-      variable: ineligble_members
-      is: true
-
+    js show if: 
+      val('ineligble_members') == true && ${ json.dumps(HHSize) } > 1
+---
+reconsider: True
+code: |
+  if HHSize == 1:
+    eligibility_options = [
+                  { False : 'Yes, I **am** eligible.' },
+                  { True : 'No, I am  **not** eligible.' },
+                ]  
+  else:
+    eligibility_options = [
+                  { True : 'Yes, 1 or more household members are **not** eligible.' },
+                  { False: f'No, all { HHSize } members of my household **are** eligible.' },
+                ]  
 ---
 code: |
-  no_eligible_members = ineligble_members and ineligble_member_count == HHSize
+  if not ineligble_members:
+    ineligble_member_count = 0
+  elif HHSize == 1 and ineligble_members:
+    ineligble_member_count = 1
+  no_eligible_members = ineligble_member_count == HHSize
 
 ---
 template: ineligible_household_member
