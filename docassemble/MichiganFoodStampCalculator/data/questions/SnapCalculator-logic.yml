@@ -34,7 +34,7 @@ code: |
   MLH_materials_included = False
   MLH_court_forms = False
   MLH_esign_supported = False
-  MLH_form_type = "document(s)"
+  MLH_form_type = "food stamp estimate"
   MLH_time_min = 5
   MLH_time_max = 10
 ---
