@@ -296,15 +296,24 @@ subject: |
 content: |
   **Include** your **entire household** in your household size. Also include them in your answers about income and expenses. We’ll ask about eligibility at the end of the tool.
   
+  As long as some of your household members are eligible, you may be able to get food stamps.
 
 ---
-template: ineligible_household_member
+template: eligibility_explanation
 subject: |
-  What if I think someone in my household is ineligible for food stamps?
+  Who is not eligible to receive food stamps?
 content: |
-  **Include** your **entire household** in your household size. Also include them in your answers about income and expenses. We’ll ask about eligibility at the end of the tool.
-  
-  As long as some of your household members are eligible, you may be able to get food stamps.
+  ##### The following people are **not** eligible to get Food Stamps:
+  <ul>
+  <li>Unlawfully present immigrants
+  <li>Furloughed prisoners
+  <li>People disqualified from receiving Food Stamps because the Michigan Department of Health and Human Services (MDHHS) says they did not cooperate with employment rules, child support rules, or other program requirements
+  <li>People disqualified by MDHHS for an Intentional Program Violation or fraud
+  <li>People disqualified by MDHHS because of certain criminal convictions such as Food Stamp trafficking
+  <li>Refugees and asylum seekers
+  </ul>
+
+  Some qualified immigrants are eligible for food assistance. To learn more, read [Food Stamp Assistance for Immigrantes](https://michiganlegalhelp.org/resources/public-assistance/food-assistance-immigrants). If you have questions about how a person’s immigration status affects food benefits eligibility, contact legal services in your area. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office near you.
 
 ---
 template: medical_expenses_help
