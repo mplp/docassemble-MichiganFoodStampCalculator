@@ -158,24 +158,8 @@ subquestion: |
   * your other dependents under age 18 (for example: a niece or grandchild you care for, or a foster child)
 
   
-  ${ prog_disclose(eligibility_explanation) }
+  ${ prog_disclose(ineligible_household_member) }
 continue button field: household_and_eligibility
----
-template: eligibility_explanation
-subject: |
-  Who is not eligible to receive food stamps?
-content: |
-  ##### The following people are **not** eligible to get Food Stamps:
-  <ul>
-  <li>Unlawfully present immigrants
-  <li>Furloughed prisoners
-  <li>People disqualified from receiving Food Stamps because the Michigan Department of Health and Human Services (MDHHS) says they did not cooperate with employment rules, child support rules, or other program requirements
-  <li>People disqualified by MDHHS for an Intentional Program Violation or fraud
-  <li>People disqualified by MDHHS because of certain criminal convictions such as Food Stamp trafficking
-  <li>Refugees and asylum seekers
-  </ul>
-
-  Some qualified immigrants are eligible for food assistance. To learn more, read [Food Stamp Assistance for Immigrantes](https://michiganlegalhelp.org/resources/public-assistance/food-assistance-immigrants). If you have questions about how a person’s immigration status affects food benefits eligibility, contact legal services in your area. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office near you.
 
 ---
 id: DownloadScreen
