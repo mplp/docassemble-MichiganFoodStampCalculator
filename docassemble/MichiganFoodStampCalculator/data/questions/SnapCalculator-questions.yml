@@ -352,43 +352,26 @@ template: unearned_income_exceptions
 subject: |
   What types of unearned income should **not** be included?
 content: |
-  The Michigan Department of Health and Human Services (MDHHS) does not count certain types of unearned income when figuring out your Food Stamps. If you or anyone in your household has any of the following kinds of income, **DO NOT** include that income.
+  The Michigan Department of Health and Human Services (MDHHS) does not count certain types of unearned income when figuring out your Food Stamps. 
+  
+  **DO NOT** include the following types of income:
 
-  **Educational Income** MDHHS will not count any educational income, including scholarships, grants, loans, work-study, assistanceships and fellowships. If you or anyone in your household receives income that goes directly to pay for your education, such as scholarship money, a student loan or other educational income, **DO NOT** count any of the income.
-
-  **Income of Legal Immigrants** If someone in your household is a **legal** immigrant who is **not allowed** to receive Food Stamps, **DO NOT** count any unearned income of that person or persons.
-
-  **EXCEPTION**: You must count all cash assistance (FIP) income in the next step, even if it is received by someone in your household who is a legal immigrant.
-
-  **The MDHHS $50 "Child Support Pass-Through"**- If you or someone in your household receives cash assistance (FIP), MDHHS usually returns up to $50 per month of the child support that they collect. If you or someone in your household receives this "Child Support Pass Through", **DO NOT** count that income.
-
-  **Child Support Refunds and Reimbursements** Sometimes the Friend of the Court accidentally sends child support payments to MDHHS instead of to the custodial parent. Other times, Friend of the Court will send too much child support to MDHHS. When either of these situations happen MDHHS must return the child support payment to the custodial parent. If you or someone in your household has received a child support "refund" from MDHHS, **DO NOT** count that income.
+  * **Educational Income** that goes directly to pay for your education, such as scholarship money, a student loan, grants, work-study, assistanceships and fellowships
+  * **The MDHHS $50 "Child Support Pass-Through"** (This is up to $50 a month in child support money that is usually returned by MDHHS if you or someone in your household receives cash assistance (FIP).)
+  * **Child Support Refunds and Reimbursements** (This is child support money "refunded" by MDHHS in some cases if the Friend of the Court (FOC) accidentally sent child support payments to MDHHS instead of to the custodial parent or if the FOC sent too much child support to MDHHS.)
   
 ---
 template: earned_income_exceptions
 subject: |
   What types of earned income should **not** be included?
 content: |
-  The Michigan Department of Health and Human Services (MDHHS) does not count certain types of earned income when figuring out your Food Stamps. If you or anyone in your household has any of the following kinds of earned income, **DO NOT** include that income.
+  The Michigan Department of Health and Human Services (MDHHS) does not count certain types of earned income when figuring out your Food Stamps. 
   
-  **Work-Study** Many college students work in a "Work Study" program as a part of their financial aid package. **DO NOT** count any work study income.
+  **DO NOT** include the following types of income:
   
-  **Earned Income of Legal Immigrants** If someone in your household is a legal immigrant who is not allowed to receive Food Stamps, **DO NOT** count any earned income of that person.
-  
-  **The Earned Income Tax Credit (EITC)** If you receive the Earned Income Tax Credit, **DO NOT** count that income. Even if you receive a portion of the Earned Income Tax Credit in your paycheck every month, *DO NOT* count that portion of your paycheck that comes from the EITC. 
-  
-  **Income diverted under SSI PASS** Some disabled persons who receive SSI income participate in the Plan to Achieve Self Sufficiency (PASS) program. The PASS program allows SSI recipients to work and earn some income without losing their SSI. If you or anyone else in your household has earned income through the PASS program, **DO NOT** count that income.
-  
-  **AmeriCorps Stipends** The AmeriCorps program is a federal volunteer program that pays volunteers a small stipend in exchange for a year of service. If you or anyone in your household is an AmeriCorps volunteer, **DO NOT** count any income from their AmeriCorps stipend.
-
-  **VISTA stipends** The Volunteers in Service to America (VISTA) Program pays volunteers a small stipend for their work. If anyone in your household is a VISTA volunteer, **DO NOT** count his or her stipend. 
-
-  **Other Volunteer Stipends** Some programs pay volunteers a small stipend for their volunteer work. If you or anyone in your household has income from any of the following programs, **DO NOT** count that income:
-  <ul>
-  <li>University Year for Action
-  <li>Urban Crime Prevention Program
-  <li>Foster Grandparents Program
-  <li>Senior Companion Program
-  <li>Retired Senior Volunteer Program (RSVP)
-  <li>Older American Volunteer Program
-  </ul>
+  * **Work-Study** income earned by college students as a part of their financial aid package
+  * **The Earned Income Tax Credit (EITC)** (even if you receive a portion of the EITC in your paycheck every month)
+  * **AmeriCorps Stipends**
+  * **VISTA (Volunteers in Service to America) stipends**
+  * **Other Volunteer Stipends** from the following programs: University Year for Action, Urban Crime Prevention Program, Foster Grandparents Program, Senior Companion Program, Retired Senior Volunteer Program (RSVP), Older American Volunteer Program
+  * **Income diverted under the SSI PASS program** (Explanation: Some disabled people who receive SSI income participate in the Plan to Achieve Self Sufficiency (PASS) program. The PASS program allows SSI recipients to work and earn some income without losing their SSI. This income also does not count for food stamp purposes.)
