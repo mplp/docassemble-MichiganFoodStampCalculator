@@ -204,15 +204,13 @@ subquestion: |
 
   % else:
   
-  If you apply and are approved, your benefit may be:
-  
-  **<span style="color: green">${ currency(FinalResult) }</span> per month**<br>
+  <p class="h5">If you apply and are approved, your benefit may be <span style="color: green">${ currency(FinalResult) }</span> per month.</p>
 
-  This is just an estimate.
+  This is just an estimate. 
   % endif
 
   %if no_eligible_members == False:
-  <h2 class="h4">You can download or email a summary and detailed calculation below.</h2>
+  <h2 class="h4">Your summary and detailed calculation</h2>
     
   ${ AssetTestScreenMsg }
 
