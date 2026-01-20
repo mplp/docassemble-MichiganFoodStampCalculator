@@ -26,6 +26,11 @@ metadata:
 modules:
   - docassemble.base.core
 ---
+# Override framework because this tool has no review screen
+default screen parts:
+  right: |
+
+---
 id: interview config code block
 initial: True
 code: |
@@ -46,15 +51,22 @@ code: |
 template: survey_embed_script
 content: |
   <script>
-    (function(t,e,s,n){var o,a,c;t.SMCX=t.SMCX||[],e.getElementById(n)||(o=e.getElementsByTagName(s),a=o[o.length-1],c=e.createElement(s),c.type="text/javascript",c.async=!0,c.id=n,c.src="https://widget.surveymonkey.com/collect/website/js/tRaiETqnLgj758hTBazgdzxwuSQVZA5gS55pIr4pOSbBe0e24oUEB64wCHRpX8sy.js",a.parentNode.insertBefore(c,a))})(window,document,"script","smcx-sdk");
+    (function(t,e,s,n){var o,a,c;t.SMCX=t.SMCX||[],e.getElementById(n)||(o=e.getElementsByTagName(s),a=o[o.length-1],c=e.createElement(s),c.type="text/javascript",c.async=!0,c.id=n,c.src="https://widget.surveymonkey.com/collect/website/js/tRaiETqnLgj758hTBazgd8qZ8ON_2FyjUqTzYvfSuztE6S5w9okWY9Dtgf96iKweF7.js",a.parentNode.insertBefore(c,a))})(window,document,"script","smcx-sdk");
   </script>
 
+---
+sections:
+  - signpost_intro: "Introduction"
+  - main_calculation: "Your household information"
+  - ineligible_group_members: "Eligibility"
+  - results_page: "Your estimate"
 ---
 ###################### Main order ######################
 mandatory: true
 code: |
   snapshot_start
   #Intro pages
+  nav.set_section("signpost_intro")
   MLH_intro_landing
   MLH_agree_terms
   MLH_intro_navigate_save
@@ -62,11 +74,14 @@ code: |
   set_progress(50)
 
   #Question screen
+  nav.set_section("main_calculation")
   HHSize
+  nav.set_section("ineligible_group_members")
   ineligble_members
   
   set_progress(100)
   snapshot_download
+  nav.set_section("results_page")
   finalScreen
   
   #saving answers???
@@ -167,30 +182,35 @@ event: finalScreen
 comment: |
   Display the major results on the screen, and let the user choose what to download.  
 question: |
+  % if no_eligible_members:
+  Based on your answers, nobody in your household is eligible to receive food stamps. 
+  % elif FinalResult <= 0:
+  You do not seem to be eligible for FAP  benefits. 
+  % else:
+  You may be eligible for FAP benefits.
+  % endif
 subquestion: |
   % if no_eligible_members:
-
-  ###Based on your answers, nobody in your household is eligible to receive food stamps. 
   
   Tap **${ MLH_back_button_label }** to go back and change your answers if you think this was a mistake.
 
-  Visit [An Overview of the Food Assistance Program (FAP, Food Stamps)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) on MichiganLegalHelp.org to learn more about the FAP program and eligibility. You may be eligible for [additional food assistance resources](https://www.michigan.gov/mdhhs/assistance-programs/food).
+  Visit [An Overview of the Food Assistance Program (FAP, Food Stamps)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) to learn more about the FAP program and eligibility. You may be eligible for [additional food assistance resources](https://www.michigan.gov/mdhhs/assistance-programs/food).
 
   % elif FinalResult <= 0:
-  
-  ###You do not seem to be eligible for FAP  benefits. 
-  
-  Visit [An Overview of the Food Assistance Program (FAP, Food Stamps)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) on MichiganLegalHelp.org to learn more about the FAP program and eligibility. You may be eligible for [additional food assistance resources](https://www.michigan.gov/mdhhs/assistance-programs/food).
+    
+  Visit [An Overview of the Food Assistance Program (FAP, Food Stamps)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) to learn more about the FAP program and eligibility. You may be eligible for [additional food assistance resources](https://www.michigan.gov/mdhhs/assistance-programs/food).
 
-  You can user the ${ MLH_back_button_label } button to revise your input, or restart a new interview. 
+  Tap the **${ MLH_back_button_label }** button to go back and change your answers if you think you made a mistake.
+
   % else:
-  ###You may be eligible for FAP benefits.
   
-  #####If you apply and are approved, your benefit may be <span style="color: green">${ currency(FinalResult) }</span> per month.<br>
+  <p class="h5">If you apply and are approved, your benefit may be <span style="color: green">${ currency(FinalResult) }</span> per month.</p>
+
+  This is just an estimate. 
   % endif
 
   %if no_eligible_members == False:
-  #####You can download or email a summary and detailed calculation below. 
+  <h2 class="h4">Your summary and detailed calculation</h2>
     
   ${ AssetTestScreenMsg }
 
@@ -217,7 +237,7 @@ objects:
 # ALDocument objects specify the metadata for each template
 objects:
   - FAP_Calculator_Results: >-
-      ALDocument.using(title="FAP Calculator Results", 
+      ALDocument.using(title="Food Stamp Calculator Results", 
       filename="FAP Calculator Results", enabled=True, has_addendum=False,
       default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
 ---
