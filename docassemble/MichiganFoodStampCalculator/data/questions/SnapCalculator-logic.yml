@@ -67,9 +67,9 @@ code: |
   snapshot_start
   #Intro pages
   nav.set_section("signpost_intro")
-  MLH_intro_landing
-  MLH_agree_terms
-  MLH_intro_navigate_save
+  #MLH_intro_landing
+  #MLH_agree_terms
+  #MLH_intro_navigate_save
   household_and_eligibility
   set_progress(50)
 

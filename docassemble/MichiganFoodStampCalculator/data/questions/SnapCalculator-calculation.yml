@@ -22,44 +22,47 @@ code: |
     HHSizeAdjusted = HHSize - ineligble_member_count
   
   # Step 2. Gross Income Test
-  #2.1 Convert weekly and biweekly income to monthly amount
+  # Convert weekly and biweekly income to monthly amount
   WUIC = WUI * 4.333    
   biWUIC = biWUI * 2.17
   WEIC = WEI * 4.333
   biWEIC = biWEI * 2.17
   
-  #2.2 Gross Earned and Unearned amounts.   
+  # 2A, 2B Gross Earned and Unearned amounts.   
   GMUI = round(MUI + WUIC + biWUIC, 0)
   GMEI = round(MEI + WEIC + biWEIC, 0)  
   
-  #2.3 Add up Unearned and Earned income
+  #2D Add up Unearned and Earned income
   TGMI = round(GMUI + GMEI - ChildSupport, 0)
+  
   # 200% poverty level/gross income test for HH
+  # HH generally categorically eligible if gross income is <= 200% federal poverty level.
   if HHSizeAdjusted <= 8:
     TwoHundredPctPov = arrTwoHundredTable[HHSizeAdjusted-1]
   else:            
-   TwoHundredPctPov = arrTwoHundredTable[7]+((HHSizeAdjusted-8)*arrTwoHundredTable[8])
-  
+    TwoHundredPctPov = arrTwoHundredTable[7]+((HHSizeAdjusted-8)*arrTwoHundredTable[8])
+  GrossIncomeLessThan200FPL = TGMI <= TwoHundredPctPov
+
   # Does Asset test apply?
   # IN MAINE THE ASSET TEST IS FUNCTIONALLY ABSENT. IF HH IS OVER ASSETS FOR FEDERAL SNAP MAINE STATE SNAP SUPPLEMENT WILL STILL BE APPLIED. CODE HERE ADJUSTED FOR MAINE.
   if ElderlyOrDisabled == "Yes" and TGMI > TwoHundredPctPov:
     ApplyAssetTest = "No"
     #"Yes, assets must be <=" + currency(AssetTest_Threshold)
-    ApplyNetAssetTest = "No"
   else:
     ApplyAssetTest = "No"
-	  ApplyNetAssetTest = "No"
-  
+
   # Gross Income Test Result
-  #NOTE TO JACK: THIS IS NOT USED IN MAINE. EVERYONE IS SUBJECT TO GIT. HAVE ADJUSTED TO INCLUDE EVERYONE.
+  GITTag = ""
   #if ElderlyOrDisabled == "No":
-  if TGMI < TwoHundredPctPov:
+  if GrossIncomeLessThan200FPL:
     GITResult = "PASSED"
   else:
     GITResult = "FAILED"
+    if ElderlyOrDisabled == "Yes":
+      GITTag = " (may still be eligible if net income test passes and asset limit is met)"
   #else:
     #GITResult = "PASSED"
-  
+
   # Step 3. Net Income Test
   # 3-1-A. Standard Deduction
   if HHSizeAdjusted < 6:
@@ -75,7 +78,7 @@ code: |
   # is more than the SMD, they can deduct the entire expense, minus $35, if they can verify it. 
   ExcessMedDed = 0
   ExcessMedTag = ""
-  if ElderlyOrDisabled == "Yes":	  
+  if ElderlyOrDisabled == "Yes":
     ElderlyOrDisabled1 = "Yes" #for 2nd display in docx.
     if MedDed < MEDICAL_THRESHOLD:
       ExcessMedDed = 0.00
@@ -185,27 +188,39 @@ code: |
     ShelterNote = "In your situation, the standard homeless deduction is higher than your shelter deductions, so it will be used in your Net Income Calculation. An MDHHS caseworker will ultimately give you a choice, but this tool uses the higher deduction."
   else:
     TotalShelterDed = ShelterDedResult
-    ShelterNote = "In your situation, your shelter deduction is greater than the standard homeless deduction, so it will be used in your Net Income Calculation. An MDHHS caseworker will ultimately give you a choice, but this tool uses the higher deduction."
+    if HomelessDed > 0:
+      ShelterNote = "In your situation, your shelter deduction is greater than the standard homeless deduction, so it will be used in your Net Income Calculation. An MDHHS caseworker will ultimately give you a choice, but this tool uses the higher deduction."
   
-  # 3-3. Net Income Calculation
+  # 3-3-A. Net Income Calculation
   #MonthlyNIC = PreAdjAfterDed - HomelessDed - ShelterDedResult
   MonthlyNIC = PreAdjAfterDed - TotalShelterDed
   MonthlyNICforDisplay = str(currency(round(MonthlyNIC,0)))
   MaxTotMonthlyNIC = 0
-	if ApplyNetAssetTest == "No":
+
+  # Does net income test apply?
+  # Per BEM 213 "Verification" section, if HH is categorically eligible (i.e. TGMI <= 200% FPL),
+  #   do NOT verify 130% gross income limit or 100% net income limit.
+  # Also per BEM 213, if NOT categorically eligible (i.e. TGMI > 200% FPL) but has SVD, HH
+  #   may be eligible if passes net income test (RFT 250 column B) and meets asset limit.
+  if not GrossIncomeLessThan200FPL and ElderlyOrDisabled == "Yes":
+    ApplyNetIncomeTest = "Yes"
+  else:
+    ApplyNetIncomeTest = "No"
+
+  if ApplyNetIncomeTest == "No":
 		if MonthlyNIC < 0:			
-      MaxTotMonthlyNICLable = str(currency(round(MaxTotMonthlyNIC,0)))
+      MaxTotMonthlyNICLabel = str(currency(round(MaxTotMonthlyNIC,0)))
 		else:
+      # 100000 is an arbitrarily large number so that no one can hit it.
 			MaxTotMonthlyNIC = 1000000
-      MaxTotMonthlyNICLable = "No Limit"  
-  # the above 100000 is an arbitrarily large number so that no once can hit it.
-	if ApplyNetAssetTest == "Yes":
-    MaxTotMonthlyNICLable = str(currency(round(MaxTotMonthlyNIC,0)))
+      MaxTotMonthlyNICLabel = "No Limit"  
+	elif ApplyNetIncomeTest == "Yes":
     if(HHSizeAdjusted <= 8):
       MaxTotMonthlyNIC = arrMaxAllowableNIC[HHSizeAdjusted-1]
     else:
       MaxTotMonthlyNIC = arrMaxAllowableNIC[7]+((HHSizeAdjusted-8)*arrMaxAllowableNIC[8])
-      
+    MaxTotMonthlyNICLabel = str(currency(round(MaxTotMonthlyNIC,0), decimals=False))
+
   # 3-3. NET INCOME TEST result
   if MaxTotMonthlyNIC >= 100000:
 		NICTestResult = "PASSED"
@@ -227,7 +242,10 @@ code: |
   tempFinal = MaxSNAPAllotment - Step41
   FinalResult = 0
   MinimumGrantTag = ''
-	if GITResult == "PASSED" and NICTestResult == "PASSED":  		
+
+  # Check that they qualify. Per BEM 213, SDV households may still qualify if net income is 
+  # below 100% FPL and asset limit is met, even if gross income is too high.
+	if (GITResult == "PASSED" and NICTestResult == "PASSED") or (GITResult == "FAILED" and NICTestResult == "PASSED" and ElderlyOrDisabled == "Yes"):
     if HHSizeAdjusted <= MINIMUM_SIZE_OF_HOUSEHOLD: 
       FinalResult = max(tempFinal, MINIMUM_GRANT)
       if MINIMUM_GRANT > tempFinal:
@@ -236,7 +254,7 @@ code: |
       FinalResult = tempFinal
   
   # Asset test message
-  if ApplyNetAssetTest == "Yes" and FinalResult > 0:   
+  if ApplyAssetTest == "Yes" and FinalResult > 0:
     AssetTestScreenMsg = "To get SNAP benefits, your assets must be " + currency(AssetTest_Threshold) + " or less.  See the SNAP Advocacy Guide <a href='https://www.masslegalservices.org/FoodStampSNAPAdvocacyGuide'>masslegalservices.org/FoodStampSNAPAdvocacyGuide</a> for more information."
   else:    
     AssetTestScreenMsg = ""
