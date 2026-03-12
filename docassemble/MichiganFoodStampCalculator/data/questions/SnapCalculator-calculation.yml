@@ -41,15 +41,19 @@ code: |
     TwoHundredPctPov = arrTwoHundredTable[HHSizeAdjusted-1]
   else:            
     TwoHundredPctPov = arrTwoHundredTable[7]+((HHSizeAdjusted-8)*arrTwoHundredTable[8])
-  GrossIncomeLessThan200FPL = TGMI <= TwoHundredPctPov
+  GrossIncomeLessThan200FPL = TGMI < TwoHundredPctPov
 
-  # Does Asset test apply?
-  # IN MAINE THE ASSET TEST IS FUNCTIONALLY ABSENT. IF HH IS OVER ASSETS FOR FEDERAL SNAP MAINE STATE SNAP SUPPLEMENT WILL STILL BE APPLIED. CODE HERE ADJUSTED FOR MAINE.
-  if ElderlyOrDisabled == "Yes" and TGMI > TwoHundredPctPov:
-    ApplyAssetTest = "No"
-    #"Yes, assets must be <=" + currency(AssetTest_Threshold)
+  AssetTestScreenLink = "Read [Income and Asset Limits for the Food Assistance Program (FAP)](https://michiganlegalhelp.org/resources/public-assistance/income-and-asset-limits-food-assistance-program-fap#the-asset-limit) to learn more."
+  
+  if ElderlyOrDisabled == "Yes" and not GrossIncomeLessThan200FPL:
+    ApplyAssetTest = "Yes"
+    AssetTestScreenMsg = "Because your household gross income is more than 200% of the federal poverty level, you likely also have to meet an asset limit to qualify for food stamps."
+  elif ineligble_members == True:
+    ApplyAssetTest = "Yes"
+    AssetTestScreenMsg = "If a household member was disqualified for certain reasons, you might also have to meet an asset limit to qualify for food stamps."
   else:
     ApplyAssetTest = "No"
+    AssetTestScreenMsg = "There is likely no asset limit for your household."
 
   # Gross Income Test Result
   GITTag = ""
@@ -252,9 +256,4 @@ code: |
         MinimumGrantTag = '(minimum grant)'
     else:
       FinalResult = tempFinal
-  
-  # Asset test message
-  if ApplyAssetTest == "Yes" and FinalResult > 0:
-    AssetTestScreenMsg = "To get SNAP benefits, your assets must be " + currency(AssetTest_Threshold) + " or less.  See the SNAP Advocacy Guide <a href='https://www.masslegalservices.org/FoodStampSNAPAdvocacyGuide'>masslegalservices.org/FoodStampSNAPAdvocacyGuide</a> for more information."
-  else:    
-    AssetTestScreenMsg = ""
+
