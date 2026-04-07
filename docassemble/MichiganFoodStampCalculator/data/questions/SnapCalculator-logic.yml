@@ -226,6 +226,9 @@ subquestion: |
   <h2 class="h3">Take our quick survey!</h2>
   Answer below or [open the survey in a new tab](${ survey_link_url_only }).
   ${ survey_embed_script }
+auto terms:
+  MDHHS: |
+    Michigan Department of Health and Human Services. This is the state agency that processes food stamp (FAP) applications.
 buttons: 
   - Exit: exit
   - Restart: restart
