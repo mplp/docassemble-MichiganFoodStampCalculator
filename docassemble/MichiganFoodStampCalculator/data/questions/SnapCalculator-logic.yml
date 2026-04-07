@@ -206,14 +206,16 @@ subquestion: |
   
   <p class="h5">If you apply and are approved, your benefit may be <span style="color: green">${ currency(FinalResult) }</span> per month.</p>
 
-  This is just an estimate. 
+  This is just an estimate.
+
+  ${ AssetTestScreenMsg }
+  ${ AssetTestScreenLink }
+
   % endif
 
   %if no_eligible_members == False:
   <h2 class="h4">Your summary and detailed calculation</h2>
-    
-  ${ AssetTestScreenMsg }
-
+  
   ${ al_user_bundle.download_list_html() }
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
