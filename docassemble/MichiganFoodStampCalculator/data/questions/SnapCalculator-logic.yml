@@ -198,7 +198,7 @@ subquestion: |
 
   % elif FinalResult <= 0:
 
-  This is just an estimate. You can still [apply for benefits](https://newmibridges.michigan.gov/s/isd-landing-page?language=en_US) and MDHHS will make its own decision about whether you qualify.
+  This is just an estimate. You can still [apply for benefits](https://newmibridges.michigan.gov/s/isd-landing-page?language=en_US) and {MDHHS} will make its own decision about whether you qualify.
   
   Visit [An Overview of the Food Assistance Program (FAP, Food Stamps)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) to learn more about the FAP program and eligibility. You may be eligible for [additional food assistance resources](https://www.michigan.gov/mdhhs/assistance-programs/food).
 
@@ -208,7 +208,7 @@ subquestion: |
   
   <p class="h5">If you apply and are approved, your benefit may be <span style="color: green">${ currency(FinalResult) }</span> per month.</p>
 
-  This is just an estimate. If you [apply for benefits](https://newmibridges.michigan.gov/s/isd-landing-page?language=en_US), MDHHS will calculate your eligibility and benefit amount. The official result may be different.
+  This is just an estimate. If you [apply for benefits](https://newmibridges.michigan.gov/s/isd-landing-page?language=en_US), {MDHHS} will calculate your eligibility and benefit amount. The official result may be different.
 
   ${ AssetTestScreenMsg }
   ${ AssetTestScreenLink }
@@ -226,7 +226,7 @@ subquestion: |
   <h2 class="h3">Take our quick survey!</h2>
   Answer below or [open the survey in a new tab](${ survey_link_url_only }).
   ${ survey_embed_script }
-auto terms:
+terms:
   MDHHS: |
     Michigan Department of Health and Human Services. This is the state agency that processes food stamp (FAP) applications.
 buttons: 
