@@ -39,7 +39,7 @@ subquestion: |
 
 fields:
   - note: |
-      <h2>Household Composition</h2>
+      <h2>Your Household</h2>
   - What is your {household size}?: HHSize
     datatype: integer
   - note: |
@@ -243,7 +243,7 @@ auto terms:
 question: |
   Eligibility
 subquestion: |
-  If some of your household members are not eligible for food stamps, the food stamp calculation will be adjusted by MDHHS. **MDHHS will still want to know about their income and expenses.**
+  If some of your household members are not eligible for food stamps, the food stamp calculation will be adjusted by {MDHHS}. **MDHHS will still want to know about their income and expenses.**
 
 fields:
   - field: ineligble_members

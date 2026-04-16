@@ -12,7 +12,6 @@ metadata:
   short title: Food Stamp Calculator
   description: |
     Use this calculator to help you find out if you are eligible to get Food Stamps (FAP)
-  #exit url: https://www.masslegalservices.org/content/online-snap-calculator
   show login: False
   tags: []
   authors:
@@ -30,6 +29,10 @@ modules:
 default screen parts:
   right: |
 
+---
+terms:
+  - MDHHS: |
+      Michigan Department of Health and Human Services. This is the state agency that processes food stamp (FAP) applications.
 ---
 id: interview config code block
 initial: True
@@ -226,13 +229,6 @@ subquestion: |
   <h2 class="h3">Take our quick survey!</h2>
   Answer below or [open the survey in a new tab](${ survey_link_url_only }).
   ${ survey_embed_script }
-terms:
-  MDHHS: |
-    Michigan Department of Health and Human Services. This is the state agency that processes food stamp (FAP) applications.
-buttons: 
-  - Exit: exit
-  - Restart: restart
-
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
