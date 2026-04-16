@@ -1,12 +1,12 @@
 [build-system]
 requires = [
-    "setuptools==80.9.0",
+    "setuptools>=80.9.0",
 ]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "docassemble.MichiganFoodStampCalculator"
-version = "0.0.5"
+version = "0.1.0"
 description = "Michigan Food Stamp (FAP) Estimator"
 readme = "README.md"
 authors = [

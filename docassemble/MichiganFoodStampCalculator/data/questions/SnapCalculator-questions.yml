@@ -39,7 +39,7 @@ subquestion: |
 
 fields:
   - note: |
-      <h2>Household Composition</h2>
+      <h2>Your Household</h2>
   - What is your {household size}?: HHSize
     datatype: integer
   - note: |
@@ -139,8 +139,6 @@ fields:
       For people over 60 or people who get a disability-based benefit, Michigan allows deductions for out-of-pocket medical expenses that are more than $35/month. Put your total monthly out-of-pocket medical expenses and we’ll calculate what deduction you’re eligible for. 
 
       ${ collapse_template(medical_expenses_help) }
-
-      The standard medical deduction is $165 for expenses over $35. If you have actual medical expenses that are more than $165, you can deduct the entire expense, minus $35, if you can verify the expenses.
       
     js show if: |
       val('Earned_Income') != null && val('ElderlyOrDisabled') == 'Yes'
@@ -245,7 +243,7 @@ auto terms:
 question: |
   Eligibility
 subquestion: |
-  If some of your household members are not eligible for food stamps, the food stamp calculation will be adjusted by MDHHS. **MDHHS will still want to know about their income and expenses.**
+  If some of your household members are not eligible for food stamps, the food stamp calculation will be adjusted by {MDHHS}. **MDHHS will still want to know about their income and expenses.**
 
 fields:
   - field: ineligble_members

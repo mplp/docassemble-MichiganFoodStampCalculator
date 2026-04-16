@@ -12,7 +12,6 @@ metadata:
   short title: Food Stamp Calculator
   description: |
     Use this calculator to help you find out if you are eligible to get Food Stamps (FAP)
-  #exit url: https://www.masslegalservices.org/content/online-snap-calculator
   show login: False
   tags: []
   authors:
@@ -30,6 +29,10 @@ modules:
 default screen parts:
   right: |
 
+---
+terms:
+  - MDHHS: |
+      Michigan Department of Health and Human Services. This is the state agency that processes food stamp (FAP) applications.
 ---
 id: interview config code block
 initial: True
@@ -197,7 +200,9 @@ subquestion: |
   Visit [An Overview of the Food Assistance Program (FAP, Food Stamps)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) to learn more about the FAP program and eligibility. You may be eligible for [additional food assistance resources](https://www.michigan.gov/mdhhs/assistance-programs/food).
 
   % elif FinalResult <= 0:
-    
+
+  This is just an estimate. You can still [apply for benefits](https://newmibridges.michigan.gov/s/isd-landing-page?language=en_US) and {MDHHS} will make its own decision about whether you qualify.
+  
   Visit [An Overview of the Food Assistance Program (FAP, Food Stamps)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) to learn more about the FAP program and eligibility. You may be eligible for [additional food assistance resources](https://www.michigan.gov/mdhhs/assistance-programs/food).
 
   Tap the **${ MLH_back_button_label }** button to go back and change your answers if you think you made a mistake.
@@ -206,7 +211,7 @@ subquestion: |
   
   <p class="h5">If you apply and are approved, your benefit may be <span style="color: green">${ currency(FinalResult) }</span> per month.</p>
 
-  This is just an estimate.
+  This is just an estimate. If you [apply for benefits](https://newmibridges.michigan.gov/s/isd-landing-page?language=en_US), {MDHHS} will calculate your eligibility and benefit amount. The official result may be different.
 
   ${ AssetTestScreenMsg }
   ${ AssetTestScreenLink }
@@ -224,10 +229,6 @@ subquestion: |
   <h2 class="h3">Take our quick survey!</h2>
   Answer below or [open the survey in a new tab](${ survey_link_url_only }).
   ${ survey_embed_script }
-buttons: 
-  - Exit: exit
-  - Restart: restart
-
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
