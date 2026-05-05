@@ -133,7 +133,7 @@ subquestion: |
   
   <h2 class="h5">Saving Your Work</h2>
   To save your work, sign in or sign up for an account. Tap the "Sign in" or "Sign up" link below the **Continue** button. Or go to the
-  % if device().is_mobile:
+  % if device() is None or device().is_mobile:
   :bars:
   % endif
   **menu** at the top of the screen and tap "Sign in or sign up to save answers".
