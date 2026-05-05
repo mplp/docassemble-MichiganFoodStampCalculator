@@ -44,13 +44,13 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.MichiganFoodStampCalculator',
-      version='0.1.0',
+      version='0.1.1',
       description=('Michigan Food Stamp (FAP) Estimator'),
       long_description='Michigan SNAP Benefits Estimator. Built upon the excellent work done by those listed below.  \r\n\r\nMaine SNAP Benefits Estimator\r\n#Author:\r\nJack Haycock\r\n\r\nMassachusetts SNAP Online Calculator\r\n\r\n#Authors:\r\nRochelle Hahn\r\nPat Baker\r\nVictoria Negus\r\nPurple Sky',
       long_description_content_type='text/markdown',
       author='Michigan Legal Help',
       author_email='ekressmiller@mplp.org',
-      license='',
+      license='MIT',
       url='https://michiganlegalhelp.org/resources/public-assistance/food-stamp-fap-calculator',
       packages=find_namespace_packages(),
       install_requires=[],
