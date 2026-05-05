@@ -1,5 +1,4 @@
-# docassemble.MLHMotionRegardingChildSupport
-
+# docassemble.MichiganFoodStampCalculator
 Michigan SNAP Benefits Estimator. Built upon the excellent work done by those listed below.  
 
 ## Authors and predecessor
