@@ -18,8 +18,6 @@ metadata:
     - Brett Harrison of Maverick & Mitchell LLC
   help_page_url: https://michiganlegalhelp.org/resources/public-assistance/food-stamps-fap
   help_page_title: Food Stamps (FAP)
-  #allowed_courts: []
-  #typical_role: "unknown"
 
 ---
 modules:
@@ -51,13 +49,6 @@ code: |
   resource_page_name = "Food Stamps (FAP)"
   survey_link_url_only = "https://www.surveymonkey.com/r/SGV8XSK"
 ---
-#template: survey_embed_script
-#content: |
-#  <script>
-#    (function(t,e,s,n){var o,a,c;t.SMCX=t.SMCX||[],e.getElementById(n)||(o=e.getElementsByTagName(s),a=o[o.length-1],c=e.createElement(s),c.type="text/javascript",c.async=!0,c.id=n,c.src="https://widget.surveymonkey.com/collect/website/js/tRaiETqnLgj758hTBazgd8qZ8ON_2FyjUqTzYvfSuztE6S5w9okWY9Dtgf96iKweF7.js",a.parentNode.insertBefore(c,a))})(window,document,"script","smcx-sdk");
-#  </script>
-#
-#---
 sections:
   - signpost_intro: "Introduction"
   - main_calculation: "Your household information"
@@ -68,27 +59,22 @@ sections:
 mandatory: true
 code: |
   snapshot_start
-  #Intro pages
   nav.set_section("signpost_intro")
   MLH_intro_landing
   MLH_agree_terms
   MLH_intro_navigate_save
   household_and_eligibility
-  set_progress(50)
 
-  #Question screen
+  #Main question screens
   nav.set_section("main_calculation")
   HHSize
   nav.set_section("ineligible_group_members")
   ineligble_members
   
-  set_progress(100)
+  MLH_patience_assembling
   snapshot_download
   nav.set_section("results_page")
   finalScreen
-  
-  #saving answers???
-  #recommend this resource???
   
 ---
 # overrides framework question.
@@ -145,7 +131,7 @@ subquestion: |
   
   <h2 class="h5">Saving Your Work</h2>
   To save your work, sign in or sign up for an account. Tap the "Sign in" or "Sign up" link below the **Continue** button. Or go to the
-  % if device().is_mobile:
+  % if device() is None or device().is_mobile:
   :bars:
   % endif
   **menu** at the top of the screen and tap "Sign in or sign up to save answers".
@@ -176,12 +162,13 @@ subquestion: |
   * your other dependents under age 18 (for example: a niece or grandchild you care for, or a foster child)
 
   
-  ${ prog_disclose(ineligible_household_member) }
+  ${ collapse_template(ineligible_household_member) }
 continue button field: household_and_eligibility
-
+progress: 25
 ---
 id: DownloadScreen
 event: finalScreen
+progress: 100
 comment: |
   Display the major results on the screen, and let the user choose what to download.  
 question: |
@@ -201,7 +188,7 @@ subquestion: |
 
   % elif FinalResult <= 0:
 
-  This is just an estimate. You can still [apply for benefits](https://newmibridges.michigan.gov/s/isd-landing-page?language=en_US) and {MDHHS} will make its own decision about whether you qualify.
+  This is just an estimate. You can still [apply for benefits](https://newmibridges.michigan.gov/) and {MDHHS} will make its own decision about whether you qualify.
   
   Visit [An Overview of the Food Assistance Program (FAP, Food Stamps)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) to learn more about the FAP program and eligibility. You may be eligible for [additional food assistance resources](https://www.michigan.gov/mdhhs/assistance-programs/food).
 
@@ -211,7 +198,7 @@ subquestion: |
   
   <p class="h5">If you apply and are approved, your benefit may be <span style="color: green">${ currency(FinalResult) }</span> per month.</p>
 
-  This is just an estimate. If you [apply for benefits](https://newmibridges.michigan.gov/s/isd-landing-page?language=en_US), {MDHHS} will calculate your eligibility and benefit amount. The official result may be different.
+  This is just an estimate. If you [apply for benefits](https://newmibridges.michigan.gov/), {MDHHS} will calculate your eligibility and benefit amount. The official result may be different.
 
   ${ AssetTestScreenMsg }
   ${ AssetTestScreenLink }
@@ -261,3 +248,13 @@ code: |
     stuff_to_snapshot['dv_present'] = showifdef('snapshot_dv_present')
   reconsider('snapshot_interview_state')
   snapshot_download = True
+---
+id: email to self email
+generic object: ALDocumentBundle
+template: x.send_email_template
+subject: |
+  Food Stamp (FAP) estimate results
+content: |
+  Someone completed a food stamp estimate at [Michigan Legal Help](https://michiganlegalhelp.org) and sent the results to this email address. The attached document is just an estimate.
+
+  You can [apply for benefits online](https://newmibridges.michigan.gov/) and {MDHHS} will make its own decision about whether you qualify. Visit [An Overview of the Food Assistance Program (FAP)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) to learn more about food stamps and eligibility. 
