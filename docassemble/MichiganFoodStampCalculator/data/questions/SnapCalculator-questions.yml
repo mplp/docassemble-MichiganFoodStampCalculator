@@ -30,6 +30,8 @@ modules:
 ---
 features:
   css: progressivedisclosure.css
+  javascript:
+    - survey_monkey_script.js
 
 ---
 id: Questions
