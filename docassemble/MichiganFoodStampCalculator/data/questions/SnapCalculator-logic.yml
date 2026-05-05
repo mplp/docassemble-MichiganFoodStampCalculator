@@ -61,27 +61,22 @@ sections:
 mandatory: true
 code: |
   snapshot_start
-  #Intro pages
   nav.set_section("signpost_intro")
   MLH_intro_landing
   MLH_agree_terms
   MLH_intro_navigate_save
   household_and_eligibility
-  set_progress(50)
 
-  #Question screen
+  #Main question screens
   nav.set_section("main_calculation")
   HHSize
   nav.set_section("ineligible_group_members")
   ineligble_members
   
-  set_progress(100)
+  MLH_patience_assembling
   snapshot_download
   nav.set_section("results_page")
   finalScreen
-  
-  #saving answers???
-  #recommend this resource???
   
 ---
 # overrides framework question.
@@ -169,12 +164,13 @@ subquestion: |
   * your other dependents under age 18 (for example: a niece or grandchild you care for, or a foster child)
 
   
-  ${ prog_disclose(ineligible_household_member) }
+  ${ collapse_template(ineligible_household_member) }
 continue button field: household_and_eligibility
-
+progress: 25
 ---
 id: DownloadScreen
 event: finalScreen
+progress: 100
 comment: |
   Display the major results on the screen, and let the user choose what to download.  
 question: |
@@ -194,7 +190,7 @@ subquestion: |
 
   % elif FinalResult <= 0:
 
-  This is just an estimate. You can still [apply for benefits](https://newmibridges.michigan.gov/s/isd-landing-page?language=en_US) and {MDHHS} will make its own decision about whether you qualify.
+  This is just an estimate. You can still [apply for benefits](https://newmibridges.michigan.gov/) and {MDHHS} will make its own decision about whether you qualify.
   
   Visit [An Overview of the Food Assistance Program (FAP, Food Stamps)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) to learn more about the FAP program and eligibility. You may be eligible for [additional food assistance resources](https://www.michigan.gov/mdhhs/assistance-programs/food).
 
@@ -204,7 +200,7 @@ subquestion: |
   
   <p class="h5">If you apply and are approved, your benefit may be <span style="color: green">${ currency(FinalResult) }</span> per month.</p>
 
-  This is just an estimate. If you [apply for benefits](https://newmibridges.michigan.gov/s/isd-landing-page?language=en_US), {MDHHS} will calculate your eligibility and benefit amount. The official result may be different.
+  This is just an estimate. If you [apply for benefits](https://newmibridges.michigan.gov/), {MDHHS} will calculate your eligibility and benefit amount. The official result may be different.
 
   ${ AssetTestScreenMsg }
   ${ AssetTestScreenLink }
@@ -254,3 +250,13 @@ code: |
     stuff_to_snapshot['dv_present'] = showifdef('snapshot_dv_present')
   reconsider('snapshot_interview_state')
   snapshot_download = True
+---
+id: email to self email
+generic object: ALDocumentBundle
+template: x.send_email_template
+subject: |
+  Food Stamp (FAP) estimate results
+content: |
+  Someone completed a food stamp estimate at [Michigan Legal Help](https://michiganlegalhelp.org) and sent the results to this email address. The attached document is just an estimate.
+
+  You can [apply for benefits online](https://newmibridges.michigan.gov/) and {MDHHS} will make its own decision about whether you qualify. Visit [An Overview of the Food Assistance Program (FAP)](https://michiganlegalhelp.org/resources/public-assistance/overview-of-food-assistance-program-fap-or-food-stamps) to learn more about food stamps and eligibility. 

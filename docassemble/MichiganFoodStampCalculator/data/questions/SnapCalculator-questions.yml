@@ -25,14 +25,9 @@ code: |
   RentMortgageDed = 0
   HomeownerDed = 0
 ---
-modules:
-  - .progressivedisclosure
----
 features:
-  css: progressivedisclosure.css
   javascript:
     - survey_monkey_script.js
-
 ---
 id: Questions
 question: |
@@ -45,7 +40,7 @@ fields:
   - What is your {household size}?: HHSize
     datatype: integer
   - note: |
-      ${ prog_disclose(ineligible_household_member) }
+      ${ collapse_template(ineligible_household_member) }
   - Does the household include any members age 60+ or receiving a disability-based benefit?: ElderlyOrDisabled 
     label above field: True
     input type: radio
@@ -239,8 +234,7 @@ auto terms:
     Only count child support that is paid under a court order. Voluntary payments or buying clothes, food, or other needs for children can’t be deducted here.
   homeowner expenses: |
     You can count any recurring charges like condo fees, mandatory association fees, property taxes, and homeowner insurance.
-
-
+progress: 50
 ---
 question: |
   Eligibility
@@ -260,7 +254,7 @@ fields:
       eligibility_options
     label above field: True
   - note: |
-      ${ prog_disclose(eligibility_explanation) }
+      ${ collapse_template(eligibility_explanation) }
   - How many of your ${ HHSize } household members are **not** eligible for food stamps?: ineligble_member_count
     datatype: integer
     label above field: true
@@ -268,6 +262,7 @@ fields:
       range(1, HHSize+1)
     js show if: 
       val('ineligble_members') == true && ${ json.dumps(HHSize) } > 1
+progress: 85
 ---
 reconsider: True
 code: |
