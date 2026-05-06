@@ -78,15 +78,18 @@ fields:
       val('hasDependent') != null
   - Monthly amount: MUI
     datatype: currency   
+    min: 1
     js show if: |
       val('hasDependent') != null && val('Uneared_Income') == "Mthly"
   - Amount every two weeks: biWUI
-    datatype: currency
+    datatype: currency   
+    min: 1
     step: 1
     js show if: |
       val('hasDependent') != null && val('Uneared_Income') == "biWkly"
   - Weekly amount: WUI
-    datatype: currency
+    datatype: currency   
+    min: 1
     step: 1
     js show if: |
       val('hasDependent') != null && val('Uneared_Income') == "Wkly"
@@ -108,15 +111,18 @@ fields:
     js show if: |
       val("hasDependent") != null
   - Monthly amount: MEI
-    datatype: currency
+    datatype: currency   
+    min: 1
     js show if: |
       val('hasDependent') != null && val('Earned_Income') == 'Mthly'
-  - Amount (very two weeks: biWEI
-    datatype: currency  
+  - Amount every two weeks: biWEI
+    datatype: currency   
+    min: 1
     js show if: |
       val('hasDependent') != null && val('Earned_Income') == 'biWkly'
   - Weekly amount: WEI
-    datatype: currency  
+    datatype: currency   
+    min: 1
     js show if: |
       val('hasDependent') != null && val('Earned_Income') == 'Wkly'
   - note: |
@@ -180,7 +186,8 @@ fields:
     js show if: |
       val('isHomeless') != null
   - Monthly rent or mortgage amount: RentMortgageDed
-    datatype: currency        
+    datatype: currency   
+    min: 1  
     show if:
       variable: rentOrMortgage
       is: Yes
