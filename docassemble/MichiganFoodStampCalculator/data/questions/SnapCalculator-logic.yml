@@ -213,12 +213,13 @@ subquestion: |
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
   % endif
 
+  ${ sign_in_message }
+
+under: |
   <h2 class="h3">Take our quick survey!</h2>
   Answer below or [open the survey in a new tab](${ survey_link_url_only }).
-under: |
+  
   <div id="survey_monkey1"></div>
-
-  ${ sign_in_message }
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
