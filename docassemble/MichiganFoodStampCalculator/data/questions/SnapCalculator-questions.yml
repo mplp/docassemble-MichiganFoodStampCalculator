@@ -96,7 +96,7 @@ fields:
   - note: |  
       <hr>
       <strong>Enter Gross __*Earned*__ Income</strong><br>
-      Wages or salaries. For self employment, including independent contractors, enter your average monthly net income (your gross income minus your business expenses).
+      Wages or salaries. For self-employment, including independent contractors, enter your average monthly net income (your gross income minus your business expenses).
 
       ${ collapse_template(earned_income_exceptions) }
     js show if: |
