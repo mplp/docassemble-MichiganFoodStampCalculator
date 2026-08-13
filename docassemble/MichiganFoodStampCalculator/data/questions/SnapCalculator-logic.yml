@@ -218,8 +218,14 @@ subquestion: |
 under: |
   <h2 class="h3">Take our quick survey!</h2>
   Answer below or [open the survey in a new tab](${ survey_link_url_only }).
-  
+
+  <div title="${iframe_title}" >
   <div id="survey_monkey1"></div>
+  </div>
+# these could be combined into a single div, but would need an edit to the framework js code
+---
+template: iframe_title
+content: User feedback survey
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
