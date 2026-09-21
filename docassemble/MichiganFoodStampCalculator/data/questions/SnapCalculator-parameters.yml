@@ -1,7 +1,7 @@
 ---
 initial: True
 code: |
-  as_of_date = "Effective as of October 1, 2025"
+  as_of_date = "Effective as of October 1, 2026"
   calcDate = today()
   
   # Parameters needing (semi)annual updates
@@ -10,26 +10,26 @@ code: |
   MEDICAL_STANDARD = 165
 
   # Shelter deductions (see RFT 255)
-  SHELTER_DED_CAP = 744
-  SHELTER_HOMELESS = 199
-  SHELTER_HEAT_UTILITY = 682
-  SHELTER_ELECTRICITY = 181
-  SHELTER_WATER = 119
-  SHELTER_PHONE = 31
-  SHELTER_FUEL = 33
-  SHELTER_TRASH = 30
+  SHELTER_DED_CAP = 769
+  SHELTER_HEAT_UTILITY = 706
+  SHELTER_ELECTRICITY = 187
+  SHELTER_WATER = 123
+  SHELTER_PHONE = 32
+  SHELTER_FUEL = 34
+  SHELTER_TRASH = 31
+  SHELTER_HOMELESS = 206
 
   NET_INCOME_PCT = 0.30
   MINIMUM_SIZE_OF_HOUSEHOLD = 2  # BH: minimum check not done in HotDocs version
   MINIMUM_GRANT = 24             # BH: minimum check not done in HotDocs version
 
   # FAP monthly and 200% income test per household size (see RFT 250)
-  arrMaxAllowableNIC = [1305, 1763, 2221, 2680, 3138, 3596, 4055, 4513, 459]  # Column B
-  arrTwoHundredTable = [2610, 3526, 4442, 5360, 6276, 7192, 8110, 9026, 918]  # Column D
+  arrMaxAllowableNIC = [1330, 1804, 2277, 2750, 3224, 3697, 4170, 4644, 474]  # Column B
+  arrTwoHundredTable = [2660, 3608, 4554, 5500, 6448, 7394, 8340, 9288, 948]  # Column D
 
   # Standard deduction (see RFT 255)
-  arrStdDed = [209, 209, 209, 223, 261, 299]
-  # Max benfit for household size (see RFT 260)
-  arrMaxSNAPAllotment = [298, 546, 785, 994, 1183, 1421, 1571, 1789, 218]
+  arrStdDed = [217, 217, 217, 229, 268, 308]
+  # Max benfit for household size (see RFT 260, first row and final page for last value)
+  arrMaxSNAPAllotment = [306, 562, 808, 1023, 1217, 1463, 1616, 1841, 225]
   # Asset test  
   AssetTest_Threshold = 4250     # BH: asset check not performed in HotDocs version, and effectively disabled here.
