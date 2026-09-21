@@ -29,7 +29,7 @@ code: |
 
   # Standard deduction (see RFT 255)
   arrStdDed = [217, 217, 217, 229, 268, 308]
-  # Max benfit for household size (see RFT 260, first column and final page for last value)
+  # Max benfit for household size (see RFT 260, first row and final page for last value)
   arrMaxSNAPAllotment = [306, 562, 808, 1023, 1217, 1463, 1616, 1841, 225]
   # Asset test  
   AssetTest_Threshold = 4250     # BH: asset check not performed in HotDocs version, and effectively disabled here.
