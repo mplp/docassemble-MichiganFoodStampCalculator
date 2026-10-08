@@ -219,7 +219,7 @@ under: |
   <h2 class="h3">Take our quick survey!</h2>
   Answer below or [open the survey in a new tab](${ survey_link_url_only }).
 
-  <iframe src="https://www.surveymonkey.com/r/SGV8XSK" title="User feedback survey"></iframe>
+  <iframe class="surveyiframe" src="${survey_link_url_only}"></iframe>
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
