@@ -216,10 +216,10 @@ subquestion: |
   ${ sign_in_message }
 
 under: |
-  <h2 class="h3">Take our quick survey!</h2>
+  <h2 class="h3" id="survey-title">Take our quick survey!</h2>
   Answer below or [open the survey in a new tab](${ survey_link_url_only }).
 
-  <iframe class="surveyiframe" src="${survey_link_url_only}"></iframe>
+  <iframe class="surveyiframe" src="${survey_link_url_only}" aria-labelledby="survey-title"></iframe>
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
