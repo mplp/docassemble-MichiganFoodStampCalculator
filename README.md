@@ -15,6 +15,7 @@ Victoria Negus
 Purple Sky
 
 ## Changelog:
+* 11/2/26  1.0.2 Update post-tool survey setup
 * 10/1/26  1.0.1 Update with 10/1/26 values.
 * 5/5/26   1.0.0 Initial release
 
