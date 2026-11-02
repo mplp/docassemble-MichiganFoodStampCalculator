@@ -25,10 +25,6 @@ code: |
   RentMortgageDed = 0
   HomeownerDed = 0
 ---
-features:
-  javascript:
-    - survey_monkey_script.js
----
 id: Questions
 question: |
 subquestion: |
